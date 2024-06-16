@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CardType {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum LoanType {
+  HOME
+  VEHICLE
+  GOLD
+  MORTGAGE
+  PERSONAL
+  EDUCATIONAL
+}
+
+enum LoanAccountStatus {
+  OUTSTANDING
+  SETTLED
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  username           String
+  password           String
+  email              String
+  phone              String
+  address            String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now())
+  Card               Card[]
+  Transaction        Transaction[]
+  LoanAccount        LoanAccount[]
+  SavingsAccount     SavingsAccount[]
+  AccountPreference  AccountPreference?
+  TwoFactorAuth      TwoFactorAuth?
+  Notification       Notification[]
+  SavingsBankAccount SavingsBankAccount[]
+}
+
+model Card {
+  id             String        @id @default(cuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id])
+  cardType       CardType
+  cardNumber     String
+  expirationDate DateTime
+  cvv            String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+  Transaction    Transaction[]
+}
+
+model Transaction {
+  id                String          @id @default(cuid())
+  userId            String
+  user              User            @relation(fields: [userId], references: [id])
+  cardId            String
+  card              Card            @relation(fields: [cardId], references: [id])
+  transactionDate   DateTime
+  transactionAmount Decimal
+  transactionType   TransactionType
+  description       String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+}
+
+model LoanAccount {
+  id                String            @id @default(cuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id])
+  loanType          LoanType
+  loanAmount        Decimal
+  outstandingAmount Decimal
+  loanInterestRate  Decimal
+  emi               Decimal
+  loanTerm          Int
+  remainingTerm     Int
+  loanStatus        LoanAccountStatus @default(OUTSTANDING)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now())
+}
+
+model SavingsAccount {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  accountNumber  String
+  accountBalance Decimal
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+}
+
+model AccountPreference {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+  notificationType      String
+  notificationFrequency String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now())
+}
+
+model TwoFactorAuth {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Notification {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  notificationType    String
+  notificationMessage String
+  notificationDate    DateTime
+  isRead              Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
+}
+
+model BankDetail {
+  id                 String               @id @default(cuid())
+  bankName           String
+  bankAddress        String
+  bankPhoneNumber    String
+  bankEmail          String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now())
+  SavingsBankAccount SavingsBankAccount[]
+}
+
+model SavingsBankAccount {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  bankId    String
+  bank      BankDetail @relation(fields: [bankId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+}
