@@ -1,44 +1,45 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { CardsService } from './cards.service';
-import { Prisma } from '@prisma/client';
+import { Card, Prisma } from '@prisma/client';
+
+import { CardsService } from '@cards/cards.service';
 
 @Controller({ path: 'cards', version: '1' })
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
   @Post()
-  create(@Body() createCardDto: Prisma.CardCreateInput) {
+  async create(@Body() createCardDto: Prisma.CardCreateInput): Promise<Card> {
     return this.cardsService.create(createCardDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Card[]> {
     return this.cardsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cardsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Card> {
+    return this.cardsService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCardDto: Prisma.CardUpdateInput,
-  ) {
-    return this.cardsService.update(+id, updateCardDto);
+  ): Promise<Card> {
+    return this.cardsService.update(id, updateCardDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardsService.remove(+id);
+  async remove(@Param('id') id: string): Promise<Card> {
+    return this.cardsService.remove(id);
   }
 }

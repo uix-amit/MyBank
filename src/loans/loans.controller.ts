@@ -1,44 +1,48 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { LoansService } from './loans.service';
-import { Prisma } from '@prisma/client';
+import { LoanAccount, Prisma } from '@prisma/client';
+
+import { LoansService } from '@loans/loans.service';
 
 @Controller({ path: 'loans', version: '1' })
 export class LoansController {
   constructor(private readonly loansService: LoansService) {}
 
   @Post()
-  create(@Body() createLoanDto: Prisma.LoanAccountCreateInput) {
+  async create(
+    @Body() createLoanDto: Prisma.LoanAccountCreateInput,
+  ): Promise<LoanAccount> {
     return this.loansService.create(createLoanDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<LoanAccount[]> {
     return this.loansService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.loansService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<LoanAccount> {
+    return this.loansService.findOne(id);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateLoanDto: Prisma.LoanAccountUpdateInput,
-  ) {
-    return this.loansService.update(+id, updateLoanDto);
+    async,
+  ): Promise<LoanAccount> {
+    return this.loansService.update(id, updateLoanDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.loansService.remove(+id);
+  async remove(@Param('id') id: string): Promise<LoanAccount> {
+    return this.loansService.remove(id);
   }
 }

@@ -16,6 +16,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@accounts/*": ["src/accounts/*"],
+      "@cards/*": ["src/cards/*"],
+      "@loans/*": ["src/loans/*"],
+      "@settings/*": ["src/settings/*"],
+      "@transactions/*": ["src/transactions/*"],
+      "@users/*": ["src/users/*"],
+      "@sharedServices/*": ["src/shared/services/*"]
+    }
   }
 }

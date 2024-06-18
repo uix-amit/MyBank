@@ -1,44 +1,47 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Transaction } from '@prisma/client';
+
+import { TransactionsService } from '@transactions/transactions.service';
 
 @Controller({ path: 'transactions', version: '1' })
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Post()
-  create(@Body() createTransactionDto: Prisma.TransactionCreateInput) {
+  async create(
+    @Body() createTransactionDto: Prisma.TransactionCreateInput,
+  ): Promise<Transaction> {
     return this.transactionsService.create(createTransactionDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Transaction[]> {
     return this.transactionsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Transaction> {
+    return this.transactionsService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateTransactionDto: Prisma.TransactionUpdateInput,
-  ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
+  ): Promise<Transaction> {
+    return this.transactionsService.update(id, updateTransactionDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
+  async remove(@Param('id') id: string): Promise<Transaction> {
+    return this.transactionsService.remove(id);
   }
 }

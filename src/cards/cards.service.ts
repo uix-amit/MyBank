@@ -1,25 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, Card } from '@prisma/client';
+
+import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
 @Injectable()
 export class CardsService {
-  create(createCardDto: Prisma.CardCreateInput) {
-    return 'This action adds a new card';
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(createCardDto: Prisma.CardCreateInput): Promise<Card> {
+    return await this.prismaService.card.create({ data: createCardDto });
   }
 
-  findAll() {
-    return `This action returns all cards`;
+  async findAll(): Promise<Card[]> {
+    return await this.prismaService.card.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} card`;
+  async findOne(id: string): Promise<Card> {
+    return await this.prismaService.card.findFirst({ where: { id } });
   }
 
-  update(id: number, updateCardDto: Prisma.CardUpdateInput) {
-    return `This action updates a #${id} card`;
+  async update(
+    id: string,
+    updateCardDto: Prisma.CardUpdateInput,
+  ): Promise<Card> {
+    return await this.prismaService.card.update({
+      where: { id },
+      data: updateCardDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} card`;
+  async remove(id: string): Promise<Card> {
+    return await this.prismaService.card.delete({ where: { id } });
   }
 }

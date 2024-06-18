@@ -1,25 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, Transaction } from '@prisma/client';
+
+import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
 @Injectable()
 export class TransactionsService {
-  create(createTransactionDto: Prisma.TransactionCreateInput) {
-    return 'This action adds a new transaction';
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async create(
+    createTransactionDto: Prisma.TransactionCreateInput,
+  ): Promise<Transaction> {
+    return await this.prismaService.transaction.create({
+      data: createTransactionDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all transactions`;
+  async findAll(): Promise<Transaction[]> {
+    return await this.prismaService.transaction.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async findOne(id: string): Promise<Transaction> {
+    return await this.prismaService.transaction.findFirst({ where: { id } });
   }
 
-  update(id: number, updateTransactionDto: Prisma.TransactionUpdateInput) {
-    return `This action updates a #${id} transaction`;
+  async update(
+    id: string,
+    updateTransactionDto: Prisma.TransactionUpdateInput,
+  ): Promise<Transaction> {
+    return await this.prismaService.transaction.update({
+      where: { id },
+      data: updateTransactionDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: string): Promise<Transaction> {
+    return await this.prismaService.transaction.delete({ where: { id } });
   }
 }
