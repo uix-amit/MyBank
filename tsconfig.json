@@ -24,6 +24,7 @@
       "@settings/*": ["src/settings/*"],
       "@transactions/*": ["src/transactions/*"],
       "@users/*": ["src/users/*"],
+      "@shared/*": ["src/shared/*"],
       "@sharedServices/*": ["src/shared/services/*"]
     }
   }

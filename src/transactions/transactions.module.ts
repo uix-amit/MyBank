@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { TransactionsController } from './transactions.controller';
+
+import { SharedModule } from '@shared/shared.module';
+import { TransactionsController } from '@transactions/transactions.controller';
+import { TransactionsService } from '@transactions/transactions.service';
 
 @Module({
+  imports: [SharedModule],
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })
