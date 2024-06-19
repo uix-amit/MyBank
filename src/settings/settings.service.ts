@@ -20,7 +20,9 @@ export class SettingsService {
   }
 
   async findOne(id: string): Promise<AccountPreference> {
-    return await this.prismaService.accountPreference.findFirst();
+    return await this.prismaService.accountPreference.findFirst({
+      where: { id },
+    });
   }
 
   async update(

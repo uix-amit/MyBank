@@ -33,10 +33,9 @@ export class LoansController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateLoanDto: Prisma.LoanAccountUpdateInput,
-    async,
   ): Promise<LoanAccount> {
     return this.loansService.update(id, updateLoanDto);
   }

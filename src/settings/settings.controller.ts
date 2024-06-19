@@ -33,10 +33,9 @@ export class SettingsController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateSettingDto: Prisma.AccountPreferenceUpdateInput,
-    async,
   ): Promise<AccountPreference> {
     return this.settingsService.update(id, updateSettingDto);
   }
