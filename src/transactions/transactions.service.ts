@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Transaction } from '@prisma/client';
+import { Prisma, Transactions } from '@prisma/client';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -8,32 +8,36 @@ export class TransactionsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    createTransactionDto: Prisma.TransactionCreateInput,
-  ): Promise<Transaction> {
-    return await this.prismaService.transaction.create({
+    createTransactionDto: Prisma.TransactionsUncheckedCreateInput,
+  ): Promise<Transactions> {
+    return await this.prismaService.transactions.create({
       data: createTransactionDto,
     });
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return await this.prismaService.transaction.findMany();
+  async findAll(): Promise<Transactions[]> {
+    return await this.prismaService.transactions.findMany();
   }
 
-  async findOne(id: string): Promise<Transaction> {
-    return await this.prismaService.transaction.findFirst({ where: { id } });
+  async findOne(TransactionID: string): Promise<Transactions> {
+    return await this.prismaService.transactions.findFirst({
+      where: { TransactionID },
+    });
   }
 
   async update(
-    id: string,
-    updateTransactionDto: Prisma.TransactionUpdateInput,
-  ): Promise<Transaction> {
-    return await this.prismaService.transaction.update({
-      where: { id },
+    TransactionID: string,
+    updateTransactionDto: Prisma.TransactionsUncheckedUpdateInput,
+  ): Promise<Transactions> {
+    return await this.prismaService.transactions.update({
+      where: { TransactionID },
       data: updateTransactionDto,
     });
   }
 
-  async remove(id: string): Promise<Transaction> {
-    return await this.prismaService.transaction.delete({ where: { id } });
+  async remove(TransactionID: string): Promise<Transactions> {
+    return await this.prismaService.transactions.delete({
+      where: { TransactionID },
+    });
   }
 }

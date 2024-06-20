@@ -8,7 +8,7 @@ export class AccountsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    createAccountDto: Prisma.SavingsAccountCreateInput,
+    createAccountDto: Prisma.SavingsAccountUncheckedCreateInput,
   ): Promise<SavingsAccount> {
     return await this.prismaService.savingsAccount.create({
       data: createAccountDto,
@@ -19,27 +19,27 @@ export class AccountsService {
     return await this.prismaService.savingsAccount.findMany();
   }
 
-  async findOne(id: string): Promise<SavingsAccount> {
+  async findOne(AccountID: string): Promise<SavingsAccount> {
     return await this.prismaService.savingsAccount.findFirst({
       where: {
-        id,
+        AccountID,
       },
     });
   }
 
   async update(
-    id: string,
-    updateAccountDto: Prisma.SavingsAccountUpdateInput,
+    AccountID: string,
+    updateAccountDto: Prisma.SavingsAccountUncheckedUpdateInput,
   ): Promise<SavingsAccount> {
     return await this.prismaService.savingsAccount.update({
-      where: { id },
+      where: { AccountID },
       data: updateAccountDto,
     });
   }
 
-  async remove(id: string): Promise<SavingsAccount> {
+  async remove(AccountID: string): Promise<SavingsAccount> {
     return await this.prismaService.savingsAccount.delete({
-      where: { id },
+      where: { AccountID },
     });
   }
 }

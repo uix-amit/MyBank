@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LoanAccount, Prisma } from '@prisma/client';
+import { Loans, Prisma } from '@prisma/client';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -7,31 +7,29 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 export class LoansService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(
-    createLoanDto: Prisma.LoanAccountCreateInput,
-  ): Promise<LoanAccount> {
-    return await this.prismaService.loanAccount.create({ data: createLoanDto });
+  async create(createLoanDto: Prisma.LoansCreateInput): Promise<Loans> {
+    return await this.prismaService.loans.create({ data: createLoanDto });
   }
 
-  async findAll(): Promise<LoanAccount[]> {
-    return await this.prismaService.loanAccount.findMany();
+  async findAll(): Promise<Loans[]> {
+    return await this.prismaService.loans.findMany();
   }
 
-  async findOne(id: string): Promise<LoanAccount> {
-    return await this.prismaService.loanAccount.findFirst({ where: { id } });
+  async findOne(LoanID: string): Promise<Loans> {
+    return await this.prismaService.loans.findFirst({ where: { LoanID } });
   }
 
   async update(
-    id: string,
-    updateLoanDto: Prisma.LoanAccountUpdateInput,
-  ): Promise<LoanAccount> {
-    return await this.prismaService.loanAccount.update({
-      where: { id },
+    LoanID: string,
+    updateLoanDto: Prisma.LoansUpdateInput,
+  ): Promise<Loans> {
+    return await this.prismaService.loans.update({
+      where: { LoanID },
       data: updateLoanDto,
     });
   }
 
-  async remove(id: string): Promise<LoanAccount> {
-    return await this.prismaService.loanAccount.delete({ where: { id } });
+  async remove(LoanID: string): Promise<Loans> {
+    return await this.prismaService.loans.delete({ where: { LoanID } });
   }
 }

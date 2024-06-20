@@ -7,17 +7,21 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { Prisma, SavingsAccount } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import { SavingsAccount } from '@prisma/client';
 
 import { AccountsService } from '@accounts/accounts.service';
+import { CreateAccountDto } from '@accounts/dto/create-account-dto';
+import { UpdateAccountDto } from '@accounts/dto/update-account-dto';
 
-@Controller({ path: 'accounts', version: '1' })
+@ApiTags('Savings Account')
+@Controller({ path: 'savings-account', version: '1' })
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Post()
   async create(
-    @Body() createAccountDto: Prisma.SavingsAccountCreateInput,
+    @Body() createAccountDto: CreateAccountDto,
   ): Promise<SavingsAccount> {
     return this.accountsService.create(createAccountDto);
   }
@@ -35,7 +39,7 @@ export class AccountsController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateAccountDto: Prisma.SavingsAccountUpdateInput,
+    @Body() updateAccountDto: UpdateAccountDto,
   ): Promise<SavingsAccount> {
     return this.accountsService.update(id, updateAccountDto);
   }

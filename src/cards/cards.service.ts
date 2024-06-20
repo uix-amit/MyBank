@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Card } from '@prisma/client';
+import { Prisma, Cards } from '@prisma/client';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -7,29 +7,29 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 export class CardsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createCardDto: Prisma.CardCreateInput): Promise<Card> {
-    return await this.prismaService.card.create({ data: createCardDto });
+  async create(createCardDto: Prisma.CardsCreateInput): Promise<Cards> {
+    return await this.prismaService.cards.create({ data: createCardDto });
   }
 
-  async findAll(): Promise<Card[]> {
-    return await this.prismaService.card.findMany();
+  async findAll(): Promise<Cards[]> {
+    return await this.prismaService.cards.findMany();
   }
 
-  async findOne(id: string): Promise<Card> {
-    return await this.prismaService.card.findFirst({ where: { id } });
+  async findOne(CardID: string): Promise<Cards> {
+    return await this.prismaService.cards.findFirst({ where: { CardID } });
   }
 
   async update(
-    id: string,
-    updateCardDto: Prisma.CardUpdateInput,
-  ): Promise<Card> {
-    return await this.prismaService.card.update({
-      where: { id },
+    CardID: string,
+    updateCardDto: Prisma.CardsUpdateInput,
+  ): Promise<Cards> {
+    return await this.prismaService.cards.update({
+      where: { CardID },
       data: updateCardDto,
     });
   }
 
-  async remove(id: string): Promise<Card> {
-    return await this.prismaService.card.delete({ where: { id } });
+  async remove(CardID: string): Promise<Cards> {
+    return await this.prismaService.cards.delete({ where: { CardID } });
   }
 }
