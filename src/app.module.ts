@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { LoggerModule } from 'nestjs-pino';
 
 import { AccountsModule } from '@accounts/accounts.module';
 import { CardsModule } from '@cards/cards.module';
@@ -31,6 +32,14 @@ import { AccountPreferencesModule } from './account-preferences/account-preferen
     NotificationsModule,
     TwoFactorAuthModule,
     AccountPreferencesModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        timestamp: () => `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
+        formatters: {
+          level: (label) => ({ level: label.toUpperCase() }),
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [

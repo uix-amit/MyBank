@@ -13,6 +13,7 @@ import { Loans } from '@prisma/client';
 import { LoansService } from '@loans/loans.service';
 import { CreateLoanDto } from '@loans/dto/create-loan-dto';
 import { UpdateLoanDto } from '@loans/dto/update-loan-dto';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Loans')
 @Controller({ path: 'loans', version: '1' })
@@ -30,20 +31,20 @@ export class LoansController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Loans> {
-    return this.loansService.findOne(id);
+  async findOne(@Param() idValidationDto: IdValidationDto): Promise<Loans> {
+    return this.loansService.findOne(idValidationDto.id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param() idValidationDto: IdValidationDto,
     @Body() updateLoanDto: UpdateLoanDto,
   ): Promise<Loans> {
-    return this.loansService.update(id, updateLoanDto);
+    return this.loansService.update(idValidationDto.id, updateLoanDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Loans> {
-    return this.loansService.remove(id);
+  async remove(@Param() idValidationDto: IdValidationDto): Promise<Loans> {
+    return this.loansService.remove(idValidationDto.id);
   }
 }

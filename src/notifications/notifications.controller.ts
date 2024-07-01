@@ -13,6 +13,7 @@ import { Notifications } from '@prisma/client';
 import { NotificationsService } from '@notifications/notifications.service';
 import { CreateNotificationDto } from '@notifications/dto/create-notification-dto';
 import { UpdateNotificationDto } from '@notifications/dto/update-notification-dto';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Notifications')
 @Controller({ path: 'notifications', version: '1' })
@@ -32,20 +33,27 @@ export class NotificationsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Notifications> {
-    return this.notificationsService.findOne(id);
+  async findOne(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<Notifications> {
+    return this.notificationsService.findOne(idValidationDto.id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param() idValidationDto: IdValidationDto,
     @Body() updateNotificationDto: UpdateNotificationDto,
   ): Promise<Notifications> {
-    return this.notificationsService.update(id, updateNotificationDto);
+    return this.notificationsService.update(
+      idValidationDto.id,
+      updateNotificationDto,
+    );
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Notifications> {
-    return this.notificationsService.remove(id);
+  async remove(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<Notifications> {
+    return this.notificationsService.remove(idValidationDto.id);
   }
 }

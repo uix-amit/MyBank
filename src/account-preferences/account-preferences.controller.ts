@@ -13,6 +13,7 @@ import { AccountPreferences } from '@prisma/client';
 import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 import { CreateAccountPreferencesDto } from '@accountPreferences/dto/create-account-preferences-dto';
 import { UpdateAccountPreferencesDto } from '@accountPreferences/dto/update-account-preferences-dto';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Account Preferences')
 @Controller({ path: 'account-preferences', version: '1' })
@@ -34,23 +35,27 @@ export class AccountPreferencesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<AccountPreferences> {
-    return this.accountPreferencesService.findOne(id);
+  async findOne(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<AccountPreferences> {
+    return this.accountPreferencesService.findOne(idValidationDto.id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param() idValidationDto: IdValidationDto,
     @Body() updateAccountPreferenceDto: UpdateAccountPreferencesDto,
   ): Promise<AccountPreferences> {
     return this.accountPreferencesService.update(
-      id,
+      idValidationDto.id,
       updateAccountPreferenceDto,
     );
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<AccountPreferences> {
-    return this.accountPreferencesService.remove(id);
+  async remove(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<AccountPreferences> {
+    return this.accountPreferencesService.remove(idValidationDto.id);
   }
 }

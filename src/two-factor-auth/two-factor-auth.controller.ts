@@ -13,6 +13,7 @@ import { TwoFactorAuth } from '@prisma/client';
 import { TwoFactorAuthService } from '@two-factor-auth/two-factor-auth.service';
 import { CreateTwoFactorAuthDto } from '@two-factor-auth/dto/create-two-factor-auth-dto';
 import { UpdateTwoFactorAuthDto } from '@two-factor-auth/dto/update-two-factor-auth-dto';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Two Factor Auth')
 @Controller({ path: 'two-factor-auth', version: '1' })
@@ -32,20 +33,27 @@ export class TwoFactorAuthController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<TwoFactorAuth> {
-    return this.twoFactorAuthService.findOne(id);
+  async findOne(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<TwoFactorAuth> {
+    return this.twoFactorAuthService.findOne(idValidationDto.id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param() idValidationDto: IdValidationDto,
     @Body() updateTwoFactorAuthDto: UpdateTwoFactorAuthDto,
   ): Promise<TwoFactorAuth> {
-    return this.twoFactorAuthService.update(id, updateTwoFactorAuthDto);
+    return this.twoFactorAuthService.update(
+      idValidationDto.id,
+      updateTwoFactorAuthDto,
+    );
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<TwoFactorAuth> {
-    return this.twoFactorAuthService.remove(id);
+  async remove(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<TwoFactorAuth> {
+    return this.twoFactorAuthService.remove(idValidationDto.id);
   }
 }

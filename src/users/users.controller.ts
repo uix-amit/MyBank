@@ -13,6 +13,7 @@ import { Users } from '@prisma/client';
 import { UsersService } from '@users/users.service';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Users')
 @Controller({ path: 'users', version: '1' })
@@ -30,20 +31,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Users> {
-    return this.usersService.findOne(id);
+  async findOne(@Param() idValidationDto: IdValidationDto): Promise<Users> {
+    return this.usersService.findOne(idValidationDto.id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<Users> {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(idValidationDto.id, updateUserDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Users> {
-    return this.usersService.remove(id);
+  async remove(@Param() idValidationDto: IdValidationDto): Promise<Users> {
+    return this.usersService.remove(idValidationDto.id);
   }
 }

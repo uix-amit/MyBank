@@ -29,7 +29,8 @@
       "@notifications/*": ["src/notifications/*"],
       "@two-factor-auth/*": ["src/two-factor-auth/*"],
       "@shared/*": ["src/shared/*"],
-      "@sharedServices/*": ["src/shared/services/*"]
+      "@sharedServices/*": ["src/shared/services/*"],
+      "@sharedValidators/*": ["src/shared/validators/*"]
     }
   }
 }
