@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Notifications } from '@prisma/client';
 
 import { NotificationsService } from '@notifications/notifications.service';
@@ -16,6 +16,12 @@ import { UpdateNotificationDto } from '@notifications/dto/update-notification-dt
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Notifications')
+@ApiBearerAuth('Authorization')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
 @Controller({ path: 'notifications', version: '1' })
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}

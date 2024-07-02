@@ -7,34 +7,52 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
 
-import { UsersService } from '@users/users.service';
+import { IsPublic } from '@auth/is-public/is-public.decorator';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { UsersService } from '@users/users.service';
 
 @ApiTags('Users')
+@ApiBearerAuth('Authorization')
 @Controller({ path: 'users', version: '1' })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @IsPublic()
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<Users> {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @Get()
   async findAll(): Promise<Users[]> {
     return this.usersService.findAll();
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @Get(':id')
   async findOne(@Param() idValidationDto: IdValidationDto): Promise<Users> {
     return this.usersService.findOne(idValidationDto.id);
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @Patch(':id')
   async update(
     @Param() idValidationDto: IdValidationDto,
@@ -43,6 +61,11 @@ export class UsersController {
     return this.usersService.update(idValidationDto.id, updateUserDto);
   }
 
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @Delete(':id')
   async remove(@Param() idValidationDto: IdValidationDto): Promise<Users> {
     return this.usersService.remove(idValidationDto.id);

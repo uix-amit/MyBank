@@ -7,7 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AccountPreferences } from '@prisma/client';
 
 import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
@@ -16,6 +16,12 @@ import { UpdateAccountPreferencesDto } from '@accountPreferences/dto/update-acco
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Account Preferences')
+@ApiBearerAuth('Authorization')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
 @Controller({ path: 'account-preferences', version: '1' })
 export class AccountPreferencesController {
   constructor(

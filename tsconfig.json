@@ -26,6 +26,7 @@
       "@accountPreferences/*": ["src/account-preferences/*"],
       "@transactions/*": ["src/transactions/*"],
       "@users/*": ["src/users/*"],
+      "@auth/*": ["src/auth/*"],
       "@notifications/*": ["src/notifications/*"],
       "@two-factor-auth/*": ["src/two-factor-auth/*"],
       "@shared/*": ["src/shared/*"],

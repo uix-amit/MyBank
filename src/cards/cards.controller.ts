@@ -7,7 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Cards } from '@prisma/client';
 
 import { CardsService } from '@cards/cards.service';
@@ -16,6 +16,12 @@ import { UpdateCardDto } from '@cards/dto/update-card-dto';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Cards')
+@ApiBearerAuth('Authorization')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
 @Controller({ path: 'cards', version: '1' })
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}

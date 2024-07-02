@@ -6,6 +6,7 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
+
   create(createUserDto: Prisma.UsersCreateInput): Promise<Users> {
     return this.prismaService.users.create({ data: createUserDto });
   }
@@ -18,6 +19,14 @@ export class UsersService {
     return this.prismaService.users.findFirst({
       where: {
         UserID,
+      },
+    });
+  }
+
+  findOneByUsername(UserName: string): Promise<Users> {
+    return this.prismaService.users.findFirst({
+      where: {
+        UserName,
       },
     });
   }

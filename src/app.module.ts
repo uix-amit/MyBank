@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 
+import { AccountPreferencesModule } from '@accountPreferences/account-preferences.module';
 import { AccountsModule } from '@accounts/accounts.module';
+import { AuthModule } from '@auth/auth.module';
 import { CardsModule } from '@cards/cards.module';
 import { LoansModule } from '@loans/loans.module';
+import { NotificationsModule } from '@notifications/notifications.module';
+import { SharedModule } from '@shared/shared.module';
 import { TransactionsModule } from '@transactions/transactions.module';
+import { TwoFactorAuthModule } from '@two-factor-auth/two-factor-auth.module';
 import { UsersModule } from '@users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { APP_GUARD } from '@nestjs/core';
-import { SharedModule } from './shared/shared.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
-import { AccountPreferencesModule } from './account-preferences/account-preferences.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AccountPreferencesModule } from './account-preferences/account-preferen
         },
       },
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

@@ -59,8 +59,9 @@ model Users {
   FirstName          String
   LastName           String
   Email              String               @unique
+  UserName           String               @unique
   Password           String
-  PhoneNumber        String
+  PhoneNumber        String               @unique
   DateOfBirth        DateTime
   CreatedAt          DateTime?            @default(now())
   UpdatedAt          DateTime?            @updatedAt

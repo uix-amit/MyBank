@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsString, IsUUID } from 'class-validator';
+import { IsDefined, IsString } from 'class-validator';
 
 export class IdValidationDto {
   @ApiProperty({
@@ -8,6 +8,5 @@ export class IdValidationDto {
   })
   @IsDefined()
   @IsString()
-  @IsUUID()
   id!: string;
 }

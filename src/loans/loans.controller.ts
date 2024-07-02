@@ -7,7 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Loans } from '@prisma/client';
 
 import { LoansService } from '@loans/loans.service';
@@ -16,6 +16,12 @@ import { UpdateLoanDto } from '@loans/dto/update-loan-dto';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Loans')
+@ApiBearerAuth('Authorization')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
 @Controller({ path: 'loans', version: '1' })
 export class LoansController {
   constructor(private readonly loansService: LoansService) {}
