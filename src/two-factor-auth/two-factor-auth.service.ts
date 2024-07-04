@@ -8,7 +8,7 @@ export class TwoFactorAuthService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    createTwoFactorAuthDto: Prisma.TwoFactorAuthCreateInput,
+    createTwoFactorAuthDto: Prisma.TwoFactorAuthUncheckedCreateInput,
   ): Promise<TwoFactorAuth> {
     return await this.prismaService.twoFactorAuth.create({
       data: createTwoFactorAuthDto,
@@ -27,7 +27,7 @@ export class TwoFactorAuthService {
 
   async update(
     TwoFactorAuthID: string,
-    updateTwoFactorAuthDto: Prisma.TwoFactorAuthUpdateInput,
+    updateTwoFactorAuthDto: Prisma.TwoFactorAuthUncheckedUpdateInput,
   ): Promise<TwoFactorAuth> {
     return await this.prismaService.twoFactorAuth.update({
       where: { TwoFactorAuthID },

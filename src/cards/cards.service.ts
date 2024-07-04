@@ -7,7 +7,9 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 export class CardsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createCardDto: Prisma.CardsCreateInput): Promise<Cards> {
+  async create(
+    createCardDto: Prisma.CardsUncheckedCreateInput,
+  ): Promise<Cards> {
     return await this.prismaService.cards.create({ data: createCardDto });
   }
 
@@ -21,7 +23,7 @@ export class CardsService {
 
   async update(
     CardID: string,
-    updateCardDto: Prisma.CardsUpdateInput,
+    updateCardDto: Prisma.CardsUncheckedUpdateInput,
   ): Promise<Cards> {
     return await this.prismaService.cards.update({
       where: { CardID },

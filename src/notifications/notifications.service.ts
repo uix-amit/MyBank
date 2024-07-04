@@ -8,7 +8,7 @@ export class NotificationsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    createNotificationDto: Prisma.NotificationsCreateInput,
+    createNotificationDto: Prisma.NotificationsUncheckedCreateInput,
   ): Promise<Notifications> {
     return await this.prismaService.notifications.create({
       data: createNotificationDto,
@@ -27,7 +27,7 @@ export class NotificationsService {
 
   async update(
     NotificationID: string,
-    updateNotificationDto: Prisma.NotificationsUpdateInput,
+    updateNotificationDto: Prisma.NotificationsUncheckedUpdateInput,
   ): Promise<Notifications> {
     return await this.prismaService.notifications.update({
       where: { NotificationID },

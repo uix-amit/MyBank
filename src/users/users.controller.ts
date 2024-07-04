@@ -15,17 +15,25 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
 import { UsersService } from '@users/users.service';
+import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 
 @ApiTags('Users')
 @ApiBearerAuth('Authorization')
 @Controller({ path: 'users', version: '1' })
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly accountPreferencesService: AccountPreferencesService,
+  ) {}
 
   @IsPublic()
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<Users> {
-    return this.usersService.create(createUserDto);
+    const user = await this.usersService.create(createUserDto);
+    this.accountPreferencesService.create({
+      UserID: user.UserID,
+    });
+    return user;
   }
 
   @ApiHeader({

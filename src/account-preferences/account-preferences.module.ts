@@ -8,5 +8,6 @@ import { SharedModule } from '@shared/shared.module';
   imports: [SharedModule],
   controllers: [AccountPreferencesController],
   providers: [AccountPreferencesService],
+  exports: [AccountPreferencesService],
 })
 export class AccountPreferencesModule {}

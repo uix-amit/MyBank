@@ -7,7 +7,9 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 export class LoansService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createLoanDto: Prisma.LoansCreateInput): Promise<Loans> {
+  async create(
+    createLoanDto: Prisma.LoansUncheckedCreateInput,
+  ): Promise<Loans> {
     return await this.prismaService.loans.create({ data: createLoanDto });
   }
 
@@ -21,7 +23,7 @@ export class LoansService {
 
   async update(
     LoanID: string,
-    updateLoanDto: Prisma.LoansUpdateInput,
+    updateLoanDto: Prisma.LoansUncheckedUpdateInput,
   ): Promise<Loans> {
     return await this.prismaService.loans.update({
       where: { LoanID },

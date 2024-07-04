@@ -7,7 +7,7 @@ import { PrismaService } from '@sharedServices/prisma/prisma.service';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(createUserDto: Prisma.UsersCreateInput): Promise<Users> {
+  create(createUserDto: Prisma.UsersUncheckedCreateInput): Promise<Users> {
     return this.prismaService.users.create({ data: createUserDto });
   }
 
@@ -31,7 +31,7 @@ export class UsersService {
     });
   }
 
-  update(UserID: string, updateUserDto: Prisma.UsersUpdateInput) {
+  update(UserID: string, updateUserDto: Prisma.UsersUncheckedUpdateInput) {
     return this.prismaService.users.update({
       where: {
         UserID,

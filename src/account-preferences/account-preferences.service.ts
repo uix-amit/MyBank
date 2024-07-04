@@ -8,7 +8,7 @@ export class AccountPreferencesService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(
-    createAccountPreferenceDto: Prisma.AccountPreferencesCreateInput,
+    createAccountPreferenceDto: Prisma.AccountPreferencesUncheckedCreateInput,
   ): Promise<AccountPreferences> {
     return await this.prismaService.accountPreferences.create({
       data: createAccountPreferenceDto,
@@ -27,7 +27,7 @@ export class AccountPreferencesService {
 
   async update(
     AccountPreferenceID: string,
-    updateAccountPreferenceDto: Prisma.AccountPreferencesUpdateInput,
+    updateAccountPreferenceDto: Prisma.AccountPreferencesUncheckedUpdateInput,
   ): Promise<AccountPreferences> {
     return await this.prismaService.accountPreferences.update({
       where: { AccountPreferenceID },
