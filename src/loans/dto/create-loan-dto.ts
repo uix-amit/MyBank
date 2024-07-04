@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { LoanAccountStatus, LoanType } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsDefined,
@@ -45,22 +46,24 @@ export class CreateLoanDto {
   InterestRate!: number;
 
   @ApiProperty({ type: String, example: 360 })
-  @IsDefined()
+  @IsOptional()
   @IsInt()
   LoanTerm!: number;
 
   @ApiProperty({ type: String, example: new Date() })
-  @IsDefined()
+  @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   LoanStartDate!: Date;
 
   @ApiProperty({ type: String, example: new Date() })
   @IsDefined()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   LoanEndDate!: Date;
 
   @ApiProperty({ type: String, example: 360 })
-  @IsDefined()
+  @IsOptional()
   @IsInt()
   RemainingTenure!: number;
 
@@ -69,7 +72,7 @@ export class CreateLoanDto {
     enumName: 'LoanAccountStatus',
     example: 'OUTSTANDING',
   })
-  @IsDefined()
+  @IsOptional()
   @IsEnum(LoanAccountStatus)
   LoanStatus!: LoanAccountStatus;
 

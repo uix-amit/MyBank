@@ -122,22 +122,22 @@ model Transactions {
 }
 
 model Loans {
-  LoanID          String            @id @default(cuid())
+  LoanID          String             @id @default(cuid())
   UserID          String
   BankID          String
-  AccountNumber   String            @unique
+  AccountNumber   String             @unique
   LoanType        LoanType
   LoanAmount      Float
   InterestRate    Float
-  LoanTerm        Int               @default(360)
-  LoanStartDate   DateTime          @default(now())
+  LoanTerm        Int?               @default(360)
+  LoanStartDate   DateTime?          @default(now())
   LoanEndDate     DateTime
-  RemainingTenure Int
-  LoanStatus      LoanAccountStatus @default(OUTSTANDING)
-  CreatedAt       DateTime?         @default(now())
-  UpdatedAt       DateTime?         @updatedAt
-  User            Users             @relation(fields: [UserID], references: [UserID]) @ignore
-  Bank            Banks             @relation(fields: [BankID], references: [BankID]) @ignore
+  RemainingTenure Int?               @default(360)
+  LoanStatus      LoanAccountStatus? @default(OUTSTANDING)
+  CreatedAt       DateTime?          @default(now())
+  UpdatedAt       DateTime?          @updatedAt
+  User            Users              @relation(fields: [UserID], references: [UserID]) @ignore
+  Bank            Banks              @relation(fields: [BankID], references: [BankID]) @ignore
 }
 
 model TwoFactorAuth {

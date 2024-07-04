@@ -8,12 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
-import { Transactions } from '@prisma/client';
+import { SavingsAccount, Transactions } from '@prisma/client';
 
-import { TransactionsService } from '@transactions/transactions.service';
+import { AccountsService } from '@accounts/accounts.service';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
 import { UpdateTransactionDto } from '@transactions/dto/update-transaction-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { TransactionsService } from '@transactions/transactions.service';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('Authorization')
@@ -24,13 +25,29 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 })
 @Controller({ path: 'transactions', version: '1' })
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(
+    private readonly transactionsService: TransactionsService,
+    private readonly accountsService: AccountsService,
+  ) {}
 
   @Post()
   async create(
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<Transactions> {
-    return this.transactionsService.create(createTransactionDto);
+    const transation =
+      await this.transactionsService.create(createTransactionDto);
+    const fromAccountDetails: SavingsAccount =
+      await this.accountsService.findOne(createTransactionDto.FromAccountID);
+    this.accountsService.update(createTransactionDto.FromAccountID, {
+      Balance: fromAccountDetails.Balance - createTransactionDto.Amount,
+    });
+    const toAccountDetails: SavingsAccount = await this.accountsService.findOne(
+      createTransactionDto.ToAccountID,
+    );
+    this.accountsService.update(createTransactionDto.ToAccountID, {
+      Balance: toAccountDetails.Balance + createTransactionDto.Amount,
+    });
+    return transation;
   }
 
   @Get()

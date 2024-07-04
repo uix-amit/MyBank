@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsDefined,
@@ -23,6 +24,7 @@ export class CreateCardDto {
 
   @ApiProperty({ type: Date, example: new Date() })
   @IsDefined()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   ExpirationDate!: Date;
 
