@@ -82,20 +82,21 @@ model Banks {
 }
 
 model SavingsAccount {
-  AccountID                String         @id @default(cuid())
+  AccountID                String             @id @default(cuid())
   UserID                   String
   BankID                   String
-  AccountNumber            String         @unique
+  AccountNumber            String             @unique
   Balance                  Float
-  Currency                 Currency       @default(INR)
-  Status                   AccoutStatus   @default(ACTIVE)
-  CreatedAt                DateTime?      @default(now())
-  UpdatedAt                DateTime?      @updatedAt
-  User                     Users          @relation(fields: [UserID], references: [UserID]) @ignore
-  Bank                     Banks          @relation(fields: [BankID], references: [BankID]) @ignore
-  Cards                    Cards[]        @ignore
-  Transactions_FromAccount Transactions[] @relation("FromAccount") @ignore
-  Transactions_ToAccount   Transactions[] @relation("ToAccount") @ignore
+  Currency                 Currency           @default(INR)
+  Status                   AccoutStatus       @default(ACTIVE)
+  CreatedAt                DateTime?          @default(now())
+  UpdatedAt                DateTime?          @updatedAt
+  User                     Users              @relation(fields: [UserID], references: [UserID]) @ignore
+  Bank                     Banks              @relation(fields: [BankID], references: [BankID]) @ignore
+  Cards                    Cards[]            @ignore
+  LoanTransactions         LoanTransactions[] @ignore
+  Transactions_FromAccount Transactions[]     @relation("FromAccount") @ignore
+  Transactions_ToAccount   Transactions[]     @relation("ToAccount") @ignore
 }
 
 model Cards {
@@ -121,23 +122,35 @@ model Transactions {
   ToAccount         SavingsAccount    @relation("ToAccount", fields: [ToAccountID], references: [AccountID]) @ignore
 }
 
+model LoanTransactions {
+  TransactionID     String            @id @default(cuid())
+  FromAccountID     String
+  ToAccountID       String
+  Amount            Float
+  TransactionDate   DateTime?         @default(now())
+  TransactionStatus TransactionStatus @default(INPROGRESS)
+  FromAccount       SavingsAccount    @relation(fields: [FromAccountID], references: [AccountID]) @ignore
+  ToAccount         Loans             @relation(fields: [ToAccountID], references: [LoanID]) @ignore
+}
+
 model Loans {
-  LoanID          String             @id @default(cuid())
-  UserID          String
-  BankID          String
-  AccountNumber   String             @unique
-  LoanType        LoanType
-  LoanAmount      Float
-  InterestRate    Float
-  LoanTerm        Int?               @default(360)
-  LoanStartDate   DateTime?          @default(now())
-  LoanEndDate     DateTime
-  RemainingTenure Int?               @default(360)
-  LoanStatus      LoanAccountStatus? @default(OUTSTANDING)
-  CreatedAt       DateTime?          @default(now())
-  UpdatedAt       DateTime?          @updatedAt
-  User            Users              @relation(fields: [UserID], references: [UserID]) @ignore
-  Bank            Banks              @relation(fields: [BankID], references: [BankID]) @ignore
+  LoanID           String             @id @default(cuid())
+  UserID           String
+  BankID           String
+  AccountNumber    String             @unique
+  LoanType         LoanType
+  LoanAmount       Float
+  InterestRate     Float
+  LoanTerm         Int?               @default(360)
+  LoanStartDate    DateTime?          @default(now())
+  LoanEndDate      DateTime
+  RemainingTenure  Int?               @default(360)
+  LoanStatus       LoanAccountStatus? @default(OUTSTANDING)
+  CreatedAt        DateTime?          @default(now())
+  UpdatedAt        DateTime?          @updatedAt
+  LoanTransactions LoanTransactions[] @ignore
+  User             Users              @relation(fields: [UserID], references: [UserID]) @ignore
+  Bank             Banks              @relation(fields: [BankID], references: [BankID]) @ignore
 }
 
 model TwoFactorAuth {

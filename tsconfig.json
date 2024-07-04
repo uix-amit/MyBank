@@ -26,6 +26,7 @@
       "@accountPreferences/*": ["src/account-preferences/*"],
       "@transactions/*": ["src/transactions/*"],
       "@users/*": ["src/users/*"],
+      "@loan-transactions/*": ["src/loan-transactions/*"],
       "@auth/*": ["src/auth/*"],
       "@notifications/*": ["src/notifications/*"],
       "@two-factor-auth/*": ["src/two-factor-auth/*"],

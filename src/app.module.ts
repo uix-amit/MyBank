@@ -15,6 +15,7 @@ import { TwoFactorAuthModule } from '@two-factor-auth/two-factor-auth.module';
 import { UsersModule } from '@users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoanTransactionsModule } from './loan-transactions/loan-transactions.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AppService } from './app.service';
       },
     }),
     AuthModule,
+    LoanTransactionsModule,
   ],
   controllers: [AppController],
   providers: [
