@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -32,6 +33,7 @@ export class CreateNotificationDto {
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   CreatedAt?: Date;
 }

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { TransactionStatus, TransactionType } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsDefined,
@@ -50,6 +51,7 @@ export class UpdateTransactionDto {
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   TransactionDate?: Date;
 

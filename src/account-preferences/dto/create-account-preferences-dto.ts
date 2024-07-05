@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -38,11 +39,13 @@ export class CreateAccountPreferencesDto {
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   CreatedAt?: Date;
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   UpdatedAt?: Date;
 }

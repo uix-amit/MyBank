@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsDate, IsDefined, IsOptional, IsString } from 'class-validator';
 
 export class CreateTwoFactorAuthDto {
@@ -17,6 +18,7 @@ export class CreateTwoFactorAuthDto {
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   CreatedAt?: Date;
 }

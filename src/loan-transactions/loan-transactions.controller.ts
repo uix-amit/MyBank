@@ -12,6 +12,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateLoanTransactionDto } from '@loan-transactions/dto/create-loan-transaction.dto';
 import { UpdateLoanTransactionDto } from '@loan-transactions/dto/update-loan-transaction.dto';
 import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
+import { LoansService } from '@loans/loans.service';
+import { AccountsService } from '@accounts/accounts.service';
 
 @ApiTags('Loan Account Transactions')
 @ApiBearerAuth('Authorization')
@@ -19,11 +21,28 @@ import { LoanTransactionsService } from '@loan-transactions/loan-transactions.se
 export class LoanTransactionsController {
   constructor(
     private readonly loanTransactionsService: LoanTransactionsService,
+    private readonly loansService: LoansService,
+    private readonly accountsService: AccountsService,
   ) {}
 
   @Post()
   async create(@Body() createLoanTransactionDto: CreateLoanTransactionDto) {
-    return this.loanTransactionsService.create(createLoanTransactionDto);
+    const loanTransaction = this.loanTransactionsService.create(
+      createLoanTransactionDto,
+    );
+    const fromAccount = await this.accountsService.findOne(
+      createLoanTransactionDto.FromAccountID,
+    );
+    const toAccount = await this.loansService.findOne(
+      createLoanTransactionDto.ToAccountID,
+    );
+    await this.accountsService.update(createLoanTransactionDto.FromAccountID, {
+      Balance: fromAccount.Balance - createLoanTransactionDto.Amount,
+    });
+    await this.loansService.update(createLoanTransactionDto.ToAccountID, {
+      LoanAmount: toAccount.LoanAmount - createLoanTransactionDto.Amount,
+    });
+    return loanTransaction;
   }
 
   @Get()

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AccoutStatus, Currency } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsDefined,
@@ -63,11 +64,13 @@ export class UpdateAccountDto {
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   CreatedAt?: Date;
 
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   UpdatedAt?: Date;
 }
