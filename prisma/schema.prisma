@@ -155,7 +155,7 @@ model Loans {
 
 model TwoFactorAuth {
   TwoFactorAuthID String    @id @default(cuid())
-  UserID          String
+  UserID          String    @unique
   Otp             Int
   CreatedAt       DateTime? @default(now())
   User            Users     @relation(fields: [UserID], references: [UserID]) @ignore
@@ -172,7 +172,7 @@ model Notifications {
 
 model AccountPreferences {
   AccountPreferenceID String    @id @default(cuid())
-  UserID              String
+  UserID              String    @unique
   EmailNotifications  Boolean?  @default(true)
   SMSNotifications    Boolean?  @default(true)
   PushNotifications   Boolean?  @default(true)

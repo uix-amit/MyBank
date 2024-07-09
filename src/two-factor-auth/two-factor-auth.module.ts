@@ -8,5 +8,6 @@ import { SharedModule } from '@shared/shared.module';
   imports: [SharedModule],
   controllers: [TwoFactorAuthController],
   providers: [TwoFactorAuthService],
+  exports: [TwoFactorAuthService],
 })
 export class TwoFactorAuthModule {}

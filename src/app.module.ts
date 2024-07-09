@@ -36,6 +36,12 @@ import { LoanTransactionsModule } from './loan-transactions/loan-transactions.mo
     AccountPreferencesModule,
     LoggerModule.forRoot({
       pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+          },
+        },
         timestamp: () => `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
         formatters: {
           level: (label) => ({ level: label.toUpperCase() }),

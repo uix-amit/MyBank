@@ -25,6 +25,12 @@ export class AccountPreferencesService {
     });
   }
 
+  async findOneByUserID(UserID: string): Promise<AccountPreferences> {
+    return await this.prismaService.accountPreferences.findFirst({
+      where: { UserID },
+    });
+  }
+
   async update(
     AccountPreferenceID: string,
     updateAccountPreferenceDto: Prisma.AccountPreferencesUncheckedUpdateInput,

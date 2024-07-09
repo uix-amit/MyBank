@@ -10,12 +10,12 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
 
+import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 import { IsPublic } from '@auth/is-public/is-public.decorator';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
 import { UsersService } from '@users/users.service';
-import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 
 @ApiTags('Users')
 @ApiBearerAuth('Authorization')

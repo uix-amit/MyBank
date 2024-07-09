@@ -40,7 +40,12 @@ export class UsersService {
     });
   }
 
-  remove(UserID: string) {
+  async remove(UserID: string) {
+    await this.prismaService.accountPreferences.delete({
+      where: {
+        UserID,
+      },
+    });
     return this.prismaService.users.delete({
       where: {
         UserID,

@@ -25,6 +25,12 @@ export class TwoFactorAuthService {
     });
   }
 
+  async findOneByUserId(UserID: string): Promise<TwoFactorAuth> {
+    return await this.prismaService.twoFactorAuth.findFirst({
+      where: { UserID },
+    });
+  }
+
   async update(
     TwoFactorAuthID: string,
     updateTwoFactorAuthDto: Prisma.TwoFactorAuthUncheckedUpdateInput,
@@ -38,6 +44,12 @@ export class TwoFactorAuthService {
   async remove(TwoFactorAuthID: string): Promise<TwoFactorAuth> {
     return await this.prismaService.twoFactorAuth.delete({
       where: { TwoFactorAuthID },
+    });
+  }
+
+  async removeByUserID(UserID: string): Promise<any> {
+    return await this.prismaService.twoFactorAuth.deleteMany({
+      where: { UserID },
     });
   }
 }
