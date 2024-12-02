@@ -43,7 +43,7 @@ The Online Banking Application is a comprehensive web-based platform that provid
 ## Technology Stack
 
 - **Backend**: [NestJS](https://github.com/nestjs/nest) (a progressive Node.js framework for building efficient, scalable, and enterprise-grade server-side applications), TypeScript and JavaScript
-- **Frontend**: Angular
+- **Frontend**: React
 - **Database**: PostgreSQL
 - **Authentication**: Two-factor authentication
 
