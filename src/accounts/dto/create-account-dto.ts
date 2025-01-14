@@ -14,7 +14,7 @@ export class CreateAccountDto {
     type: String,
     example: 'ae7a58cd-4696-4984-a954-f34b1a8af470',
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   UserID!: string;
 
