@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Loans } from '@prisma/client';
 
-import { LoansService } from '@loans/loans.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateLoanDto } from '@loans/dto/create-loan-dto';
 import { UpdateLoanDto } from '@loans/dto/update-loan-dto';
+import { LoansService } from '@loans/loans.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Loans')
@@ -22,6 +24,7 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
   description: 'Bearer token',
   required: true,
 })
+@UseGuards(JwtAuthGuard)
 @Controller({ path: 'loans', version: '1' })
 export class LoansController {
   constructor(private readonly loansService: LoansService) {}

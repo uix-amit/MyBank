@@ -6,17 +6,25 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 
 import { CreateLoanTransactionDto } from '@loan-transactions/dto/create-loan-transaction.dto';
 import { UpdateLoanTransactionDto } from '@loan-transactions/dto/update-loan-transaction.dto';
 import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
 import { LoansService } from '@loans/loans.service';
 import { AccountsService } from '@accounts/accounts.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 
 @ApiTags('Loan Account Transactions')
 @ApiBearerAuth('Authorization')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer token',
+  required: true,
+})
+@UseGuards(JwtAuthGuard)
 @Controller({ path: 'loan-transactions', version: '1' })
 export class LoanTransactionsController {
   constructor(

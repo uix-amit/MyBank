@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { SavingsAccount, Transactions } from '@prisma/client';
 
 import { AccountsService } from '@accounts/accounts.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
 import { UpdateTransactionDto } from '@transactions/dto/update-transaction-dto';
@@ -23,6 +25,7 @@ import { TransactionsService } from '@transactions/transactions.service';
   description: 'Bearer token',
   required: true,
 })
+@UseGuards(JwtAuthGuard)
 @Controller({ path: 'transactions', version: '1' })
 export class TransactionsController {
   constructor(

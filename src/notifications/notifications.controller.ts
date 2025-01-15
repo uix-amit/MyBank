@@ -1,18 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Notifications } from '@prisma/client';
 
-import { NotificationsService } from '@notifications/notifications.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateNotificationDto } from '@notifications/dto/create-notification-dto';
 import { UpdateNotificationDto } from '@notifications/dto/update-notification-dto';
+import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Notifications')
@@ -22,6 +24,7 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
   description: 'Bearer token',
   required: true,
 })
+@UseGuards(JwtAuthGuard)
 @Controller({ path: 'notifications', version: '1' })
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
