@@ -37,8 +37,15 @@ export class TransactionsController {
   async create(
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<Transactions> {
-    const transation =
-      await this.transactionsService.create(createTransactionDto);
+    const transation = await this.transactionsService.create({
+      ...createTransactionDto,
+      TransactionType: createTransactionDto.TransactionType
+        ? createTransactionDto.TransactionType
+        : 'DEBIT',
+      TransactionStatus: createTransactionDto.TransactionStatus
+        ? createTransactionDto.TransactionStatus
+        : 'COMPLETE',
+    });
     const fromAccountDetails: SavingsAccount =
       await this.accountsService.findOne(createTransactionDto.FromAccountID);
     this.accountsService.update(createTransactionDto.FromAccountID, {

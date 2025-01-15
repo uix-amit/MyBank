@@ -35,7 +35,7 @@ export class CreateTransactionDto {
     enumName: 'TransactionType',
     examples: ['CREDIT', 'DEBIT'],
   })
-  @IsDefined()
+  @IsOptional()
   @IsEnum(TransactionType)
   TransactionType: TransactionType;
 
@@ -50,7 +50,7 @@ export class CreateTransactionDto {
     enumName: 'TransactionStatus',
     examples: ['COMPLETE', 'INPROGRESS', 'FAILED'],
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   TransactionStatus: TransactionStatus;
 }
