@@ -15,7 +15,7 @@ export class CreateLoanDto {
     type: String,
     example: '82cba0c1-00d7-46ca-904a-6558fe953cee',
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   UserID!: string;
 
@@ -57,7 +57,7 @@ export class CreateLoanDto {
   LoanStartDate!: Date;
 
   @ApiProperty({ type: String, example: new Date() })
-  @IsDefined()
+  @IsOptional()
   @Transform(({ value }) => new Date(value))
   @IsDate()
   LoanEndDate!: Date;

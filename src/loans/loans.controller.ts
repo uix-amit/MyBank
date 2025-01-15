@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Loans } from '@prisma/client';
+import { addYears } from 'date-fns';
 
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateLoanDto } from '@loans/dto/create-loan-dto';
@@ -30,8 +32,13 @@ export class LoansController {
   constructor(private readonly loansService: LoansService) {}
 
   @Post()
-  async create(@Body() createLoanDto: CreateLoanDto): Promise<Loans> {
-    return this.loansService.create(createLoanDto);
+  async create(
+    @Request() req: any,
+    @Body() createLoanDto: CreateLoanDto,
+  ): Promise<Loans> {
+    const UserID = req.user.UserID;
+    const LoanEndDate = addYears(new Date(), createLoanDto.LoanTerm);
+    return this.loansService.create({ ...createLoanDto, UserID, LoanEndDate });
   }
 
   @Get()
