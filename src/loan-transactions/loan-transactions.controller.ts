@@ -35,9 +35,12 @@ export class LoanTransactionsController {
 
   @Post()
   async create(@Body() createLoanTransactionDto: CreateLoanTransactionDto) {
-    const loanTransaction = this.loanTransactionsService.create(
-      createLoanTransactionDto,
-    );
+    const loanTransaction = this.loanTransactionsService.create({
+      ...createLoanTransactionDto,
+      TransactionStatus: createLoanTransactionDto.TransactionStatus
+        ? createLoanTransactionDto.TransactionStatus
+        : 'COMPLETE',
+    });
     const fromAccount = await this.accountsService.findOne(
       createLoanTransactionDto.FromAccountID,
     );

@@ -42,7 +42,7 @@ export class CreateLoanTransactionDto {
     enumName: 'TransactionStatus',
     examples: ['COMPLETE', 'INPROGRESS', 'FAILED'],
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   TransactionStatus: TransactionStatus;
 }
