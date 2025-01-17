@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
@@ -16,6 +18,7 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
 import { UsersService } from '@users/users.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth('Authorization')
@@ -41,9 +44,10 @@ export class UsersController {
     description: 'Bearer token',
     required: true,
   })
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(): Promise<Users[]> {
-    return this.usersService.findAll();
+  async findAll(@Request() req: any): Promise<Users> {
+    return this.usersService.findOne(req.user.UserID);
   }
 
   @ApiHeader({
@@ -61,6 +65,7 @@ export class UsersController {
     description: 'Bearer token',
     required: true,
   })
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param() idValidationDto: IdValidationDto,
