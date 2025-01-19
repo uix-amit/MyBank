@@ -1,19 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsBoolean,
-  IsDate,
-  IsDefined,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
 
 export class UpdateAccountPreferencesDto {
   @ApiProperty({
     type: String,
     example: '5b836fb0-7da3-4404-a64f-9f195a6171e1',
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   AccountPreferenceID: string;
 
@@ -21,7 +15,7 @@ export class UpdateAccountPreferencesDto {
     type: String,
     example: 'c7ac2c51-7768-442d-83fe-c9bac1257013',
   })
-  @IsDefined()
+  @IsOptional()
   @IsString()
   UserID: string;
 
