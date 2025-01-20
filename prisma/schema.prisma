@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -77,7 +78,7 @@ model Banks {
   BankName          String           @unique
   CustomerCareEmail String
   CustomerCarePhone String
-  Accounts          SavingsAccount[] @ignore
+  Accounts          SavingsAccount[]
   Loans             Loans[]          @ignore
 }
 
@@ -92,7 +93,7 @@ model SavingsAccount {
   CreatedAt                DateTime?          @default(now())
   UpdatedAt                DateTime?          @updatedAt
   User                     Users              @relation(fields: [UserID], references: [UserID]) @ignore
-  Bank                     Banks              @relation(fields: [BankID], references: [BankID]) @ignore
+  Bank                     Banks              @relation(fields: [BankID], references: [BankID])
   Cards                    Cards[]            @ignore
   LoanTransactions         LoanTransactions[] @ignore
   Transactions_FromAccount Transactions[]     @relation("FromAccount") @ignore

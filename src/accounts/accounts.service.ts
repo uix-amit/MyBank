@@ -15,8 +15,19 @@ export class AccountsService {
     });
   }
 
-  async findAll(): Promise<SavingsAccount[]> {
-    return await this.prismaService.savingsAccount.findMany();
+  async findAll(
+    UserID: string,
+  ): Promise<Array<SavingsAccount & { Bank: { BankName: string } }>> {
+    return await this.prismaService.savingsAccount.findMany({
+      where: { UserID },
+      include: {
+        Bank: {
+          select: {
+            BankName: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(AccountID: string): Promise<SavingsAccount> {
