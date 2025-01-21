@@ -15,6 +15,7 @@ import { TwoFactorAuthModule } from '@two-factor-auth/two-factor-auth.module';
 import { UsersModule } from '@users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BraintreeModule } from './braintree/braintree.module';
 import { LoanTransactionsModule } from './loan-transactions/loan-transactions.module';
 
 @Module({
@@ -50,6 +51,7 @@ import { LoanTransactionsModule } from './loan-transactions/loan-transactions.mo
     }),
     AuthModule,
     LoanTransactionsModule,
+    BraintreeModule,
   ],
   controllers: [AppController],
   providers: [
