@@ -66,7 +66,7 @@ model Users {
   DateOfBirth        DateTime
   CreatedAt          DateTime?            @default(now())
   UpdatedAt          DateTime?            @updatedAt
-  Accounts           SavingsAccount[]     @ignore
+  Accounts           SavingsAccount[]
   Loans              Loans[]              @ignore
   TwoFactorAuth      TwoFactorAuth[]      @ignore
   Notifications      Notifications[]      @ignore
@@ -92,9 +92,9 @@ model SavingsAccount {
   Status                   AccoutStatus       @default(ACTIVE)
   CreatedAt                DateTime?          @default(now())
   UpdatedAt                DateTime?          @updatedAt
-  User                     Users              @relation(fields: [UserID], references: [UserID]) @ignore
+  User                     Users              @relation(fields: [UserID], references: [UserID])
   Bank                     Banks              @relation(fields: [BankID], references: [BankID])
-  Cards                    Cards[]            @ignore
+  Cards                    Cards[]
   LoanTransactions         LoanTransactions[] @ignore
   Transactions_FromAccount Transactions[]     @relation("FromAccount") @ignore
   Transactions_ToAccount   Transactions[]     @relation("ToAccount") @ignore
@@ -108,7 +108,7 @@ model Cards {
   CVV            Int
   CreatedAt      DateTime?      @default(now())
   UpdatedAt      DateTime?      @updatedAt
-  Account        SavingsAccount @relation(fields: [AccountID], references: [AccountID]) @ignore
+  Account        SavingsAccount @relation(fields: [AccountID], references: [AccountID])
 }
 
 model Transactions {

@@ -14,7 +14,26 @@ export class CardsService {
   }
 
   async findAll(): Promise<Cards[]> {
-    return await this.prismaService.cards.findMany();
+    return await this.prismaService.cards.findMany({
+      include: {
+        Account: {
+          select: {
+            AccountNumber: true,
+            User: {
+              select: {
+                FirstName: true,
+                LastName: true,
+              },
+            },
+            Bank: {
+              select: {
+                BankName: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async findOne(CardID: string): Promise<Cards> {
