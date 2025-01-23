@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
@@ -61,8 +62,8 @@ export class TransactionsController {
   }
 
   @Get()
-  async findAll(): Promise<Transactions[]> {
-    return this.transactionsService.findAll();
+  async findAll(@Request() req: any): Promise<Transactions[]> {
+    return this.transactionsService.findAll(req.user.UserID);
   }
 
   @Get(':id')

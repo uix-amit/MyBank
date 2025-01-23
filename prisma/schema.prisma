@@ -96,8 +96,8 @@ model SavingsAccount {
   Bank                     Banks              @relation(fields: [BankID], references: [BankID])
   Cards                    Cards[]
   LoanTransactions         LoanTransactions[] @ignore
-  Transactions_FromAccount Transactions[]     @relation("FromAccount") @ignore
-  Transactions_ToAccount   Transactions[]     @relation("ToAccount") @ignore
+  Transactions_FromAccount Transactions[]     @relation("FromAccount")
+  Transactions_ToAccount   Transactions[]     @relation("ToAccount")
 }
 
 model Cards {
@@ -119,8 +119,8 @@ model Transactions {
   TransactionType   TransactionType
   TransactionDate   DateTime?         @default(now())
   TransactionStatus TransactionStatus @default(INPROGRESS)
-  FromAccount       SavingsAccount    @relation("FromAccount", fields: [FromAccountID], references: [AccountID]) @ignore
-  ToAccount         SavingsAccount    @relation("ToAccount", fields: [ToAccountID], references: [AccountID]) @ignore
+  FromAccount       SavingsAccount    @relation("FromAccount", fields: [FromAccountID], references: [AccountID])
+  ToAccount         SavingsAccount    @relation("ToAccount", fields: [ToAccountID], references: [AccountID])
 }
 
 model LoanTransactions {

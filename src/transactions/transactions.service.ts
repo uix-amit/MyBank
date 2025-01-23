@@ -15,8 +15,27 @@ export class TransactionsService {
     });
   }
 
-  async findAll(): Promise<Transactions[]> {
-    return await this.prismaService.transactions.findMany();
+  async findAll(UserID: string): Promise<Transactions[]> {
+    return await this.prismaService.transactions.findMany({
+      where: {
+        OR: [
+          {
+            FromAccount: {
+              UserID,
+            },
+          },
+          {
+            ToAccount: {
+              UserID,
+            },
+          },
+        ],
+      },
+      include: {
+        FromAccount: true,
+        ToAccount: true,
+      },
+    });
   }
 
   async findOne(TransactionID: string): Promise<Transactions> {
