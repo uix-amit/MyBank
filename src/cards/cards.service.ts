@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Cards } from '@prisma/client';
+import { Cards, Prisma } from '@prisma/client';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -13,23 +13,30 @@ export class CardsService {
     return await this.prismaService.cards.create({ data: createCardDto });
   }
 
-  async findAll(): Promise<Cards[]> {
-    return await this.prismaService.cards.findMany({
-      include: {
-        Account: {
-          select: {
-            AccountNumber: true,
-            User: {
-              select: {
-                FirstName: true,
-                LastName: true,
-              },
+  async findAll(UserID: string): Promise<{
+    Accounts: {
+      Cards: Cards[];
+    }[];
+  }> {
+    return await this.prismaService.users.findUnique({
+      where: { UserID },
+      select: {
+        FirstName: true,
+        LastName: true,
+        Accounts: {
+          where: {
+            Cards: {
+              some: {}, // This filters accounts that have at least one card
             },
+          },
+          select: {
+            Cards: true,
             Bank: {
               select: {
                 BankName: true,
               },
             },
+            AccountNumber: true,
           },
         },
       },

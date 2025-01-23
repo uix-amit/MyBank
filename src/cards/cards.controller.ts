@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
@@ -35,8 +36,12 @@ export class CardsController {
   }
 
   @Get()
-  async findAll(): Promise<Cards[]> {
-    return this.cardsService.findAll();
+  async findAll(@Request() req: any): Promise<{
+    Accounts: {
+      Cards: Cards[];
+    }[];
+  }> {
+    return this.cardsService.findAll(req.user.UserID);
   }
 
   @Get(':id')
