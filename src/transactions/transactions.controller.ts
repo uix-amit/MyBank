@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
 import { UpdateTransactionDto } from '@transactions/dto/update-transaction-dto';
 import { TransactionsService } from '@transactions/transactions.service';
+import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('Authorization')
@@ -64,6 +66,14 @@ export class TransactionsController {
   @Get()
   async findAll(@Request() req: any): Promise<Transactions[]> {
     return this.transactionsService.findAll(req.user.UserID);
+  }
+
+  @Get('filter')
+  async findAllByFilter(
+    @Request() req: any,
+    @Query() filterDto: FilterTransactionsDto,
+  ): Promise<Transactions[]> {
+    return this.transactionsService.findAllByFilter(req.user.UserID, filterDto);
   }
 
   @Get(':id')
