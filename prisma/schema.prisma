@@ -67,10 +67,10 @@ model Users {
   CreatedAt          DateTime?            @default(now())
   UpdatedAt          DateTime?            @updatedAt
   Accounts           SavingsAccount[]
-  Loans              Loans[]              @ignore
-  TwoFactorAuth      TwoFactorAuth[]      @ignore
-  Notifications      Notifications[]      @ignore
-  AccountPreferences AccountPreferences[] @ignore
+  Loans              Loans[]
+  TwoFactorAuth      TwoFactorAuth[]
+  Notifications      Notifications[]
+  AccountPreferences AccountPreferences[]
 }
 
 model Banks {
@@ -79,7 +79,7 @@ model Banks {
   CustomerCareEmail String
   CustomerCarePhone String
   Accounts          SavingsAccount[]
-  Loans             Loans[]          @ignore
+  Loans             Loans[]
 }
 
 model SavingsAccount {
@@ -95,7 +95,7 @@ model SavingsAccount {
   User                     Users              @relation(fields: [UserID], references: [UserID])
   Bank                     Banks              @relation(fields: [BankID], references: [BankID])
   Cards                    Cards[]
-  LoanTransactions         LoanTransactions[] @ignore
+  LoanTransactions         LoanTransactions[]
   Transactions_FromAccount Transactions[]     @relation("FromAccount")
   Transactions_ToAccount   Transactions[]     @relation("ToAccount")
 }
@@ -130,8 +130,8 @@ model LoanTransactions {
   Amount            Float
   TransactionDate   DateTime?         @default(now())
   TransactionStatus TransactionStatus @default(INPROGRESS)
-  FromAccount       SavingsAccount    @relation(fields: [FromAccountID], references: [AccountID]) @ignore
-  ToAccount         Loans             @relation(fields: [ToAccountID], references: [LoanID]) @ignore
+  FromAccount       SavingsAccount    @relation(fields: [FromAccountID], references: [AccountID])
+  ToAccount         Loans             @relation(fields: [ToAccountID], references: [LoanID])
 }
 
 model Loans {
@@ -149,9 +149,9 @@ model Loans {
   LoanStatus       LoanAccountStatus? @default(OUTSTANDING)
   CreatedAt        DateTime?          @default(now())
   UpdatedAt        DateTime?          @updatedAt
-  LoanTransactions LoanTransactions[] @ignore
-  User             Users              @relation(fields: [UserID], references: [UserID]) @ignore
-  Bank             Banks              @relation(fields: [BankID], references: [BankID]) @ignore
+  LoanTransactions LoanTransactions[]
+  User             Users              @relation(fields: [UserID], references: [UserID])
+  Bank             Banks              @relation(fields: [BankID], references: [BankID])
 }
 
 model TwoFactorAuth {
@@ -159,7 +159,7 @@ model TwoFactorAuth {
   UserID          String    @unique
   Otp             Int
   CreatedAt       DateTime? @default(now())
-  User            Users     @relation(fields: [UserID], references: [UserID]) @ignore
+  User            Users     @relation(fields: [UserID], references: [UserID])
 }
 
 model Notifications {
@@ -168,7 +168,7 @@ model Notifications {
   Message        String
   IsRead         Boolean?  @default(false)
   CreatedAt      DateTime? @default(now())
-  User           Users     @relation(fields: [UserID], references: [UserID]) @ignore
+  User           Users     @relation(fields: [UserID], references: [UserID])
 }
 
 model AccountPreferences {
@@ -180,5 +180,5 @@ model AccountPreferences {
   EnableTwoFactorAuth Boolean?  @default(true)
   CreatedAt           DateTime? @default(now())
   UpdatedAt           DateTime? @updatedAt
-  User                Users     @relation(fields: [UserID], references: [UserID]) @ignore
+  User                Users     @relation(fields: [UserID], references: [UserID])
 }

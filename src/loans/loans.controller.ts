@@ -42,8 +42,8 @@ export class LoansController {
   }
 
   @Get()
-  async findAll(): Promise<Loans[]> {
-    return this.loansService.findAll();
+  async findAll(@Request() req: any): Promise<Loans[]> {
+    return this.loansService.findAll(req.user.UserID);
   }
 
   @Get(':id')

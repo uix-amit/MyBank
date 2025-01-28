@@ -13,8 +13,17 @@ export class LoansService {
     return await this.prismaService.loans.create({ data: createLoanDto });
   }
 
-  async findAll(): Promise<Loans[]> {
-    return await this.prismaService.loans.findMany();
+  async findAll(UserID: string): Promise<Loans[]> {
+    return await this.prismaService.loans.findMany({
+      where: { UserID },
+      include: {
+        Bank: {
+          select: {
+            BankName: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(LoanID: string): Promise<Loans> {
