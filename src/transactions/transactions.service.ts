@@ -36,6 +36,9 @@ export class TransactionsService {
         FromAccount: true,
         ToAccount: true,
       },
+      orderBy: {
+        TransactionDate: 'desc',
+      },
     });
   }
 
@@ -70,6 +73,9 @@ export class TransactionsService {
       include: {
         FromAccount: true,
         ToAccount: true,
+      },
+      orderBy: {
+        TransactionDate: 'asc',
       },
     });
   }

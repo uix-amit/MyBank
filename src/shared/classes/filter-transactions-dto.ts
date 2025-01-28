@@ -1,10 +1,12 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { TransactionType } from '@prisma/client';
+import { isValidDate } from '@shared/utils/date-validator';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FilterTransactionsDto {
-  @ApiProperty({
+  @Transform(({ value }) => (value ? value : undefined))
+  @ApiPropertyOptional({
     enum: TransactionType,
     enumName: 'TransactionType',
     examples: ['CREDIT', 'DEBIT'],
@@ -13,13 +15,17 @@ export class FilterTransactionsDto {
   @IsEnum(TransactionType)
   TransactionType: TransactionType;
 
-  @Transform(({ value }) => (value ? new Date(value).toISOString() : undefined))
+  @Transform(({ value }) =>
+    isValidDate(value) ? new Date(value).toISOString() : undefined,
+  )
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
   @IsString()
   StartDate: Date;
 
-  @Transform(({ value }) => (value ? new Date(value).toISOString() : undefined))
+  @Transform(({ value }) =>
+    isValidDate(value) ? new Date(value).toISOString() : undefined,
+  )
   @ApiPropertyOptional({ type: Date, example: new Date() })
   @IsOptional()
   @IsString()
