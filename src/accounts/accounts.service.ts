@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, SavingsAccount } from '@prisma/client';
+import { Banks, Prisma, SavingsAccount } from '@prisma/client';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -28,6 +28,13 @@ export class AccountsService {
         },
       },
     });
+  }
+
+  async getBanks(): Promise<Banks[]> {
+    const banks = await this.prismaService.banks.findMany();
+    console.log(JSON.stringify(banks));
+
+    return await this.prismaService.banks.findMany();
   }
 
   async findOne(AccountID: string): Promise<SavingsAccount> {

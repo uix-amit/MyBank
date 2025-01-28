@@ -10,13 +10,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
-import { SavingsAccount } from '@prisma/client';
+import { Banks, SavingsAccount } from '@prisma/client';
 
 import { AccountsService } from '@accounts/accounts.service';
 import { CreateAccountDto } from '@accounts/dto/create-account-dto';
 import { UpdateAccountDto } from '@accounts/dto/update-account-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Savings Account')
 @ApiBearerAuth('Authorization')
@@ -45,6 +45,13 @@ export class AccountsController {
   ): Promise<Array<SavingsAccount & { Bank: { BankName: string } }>> {
     const UserID = req.user.UserID;
     return this.accountsService.findAll(UserID);
+  }
+
+  @Get('banks')
+  async findAllBanks(): Promise<Banks[]> {
+    console.log('findAllBanks');
+
+    return this.accountsService.getBanks();
   }
 
   @Get(':id')
