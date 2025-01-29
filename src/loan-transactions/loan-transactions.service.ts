@@ -13,8 +13,26 @@ export class LoanTransactionsService {
     });
   }
 
-  async findAll(): Promise<LoanTransactions[]> {
-    return await this.prismaService.loanTransactions.findMany();
+  async findAll(UserID: string): Promise<LoanTransactions[]> {
+    return await this.prismaService.loanTransactions.findMany({
+      where: {
+        OR: [
+          {
+            FromAccount: { UserID },
+          },
+          {
+            ToAccount: { UserID },
+          },
+        ],
+      },
+      include: {
+        FromAccount: true,
+        ToAccount: true,
+      },
+      orderBy: {
+        TransactionDate: 'desc',
+      },
+    });
   }
 
   async findOne(TransactionID: string): Promise<LoanTransactions> {

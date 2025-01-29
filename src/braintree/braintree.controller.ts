@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { BraintreeService } from './braintree.service';
 import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
 import { TransactionsService } from '@transactions/transactions.service';
+import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
 
 @ApiTags('Braintree')
 @ApiBearerAuth('Authorization')
@@ -19,6 +20,7 @@ export class BraintreeController {
   constructor(
     private readonly braintreeService: BraintreeService,
     private readonly transactionService: TransactionsService,
+    private readonly loanTransactionService: LoanTransactionsService,
   ) {}
 
   @Get('client-token')
@@ -30,25 +32,32 @@ export class BraintreeController {
   async checkout(
     @Body()
     body: {
-      paymentMethodNonce: string;
+      nonce: string;
       transaction: CreateTransactionDto;
+      transactionType: 'Transfer' | 'LoanRepayment';
     },
   ) {
-    const { paymentMethodNonce, transaction } = body;
+    const { nonce, transaction, transactionType } = body;
     const braintreeTransactionResponse =
-      await this.braintreeService.processPayment(
-        transaction.Amount,
-        paymentMethodNonce,
-      );
-    await this.transactionService.create({
-      ...transaction,
-      TransactionType: transaction.TransactionType
-        ? transaction.TransactionType
-        : 'DEBIT',
-      TransactionStatus: transaction.TransactionStatus
-        ? transaction.TransactionStatus
-        : 'COMPLETE',
-    });
+      await this.braintreeService.processPayment(transaction.Amount, nonce);
+    if (transactionType === 'Transfer') {
+      await this.transactionService.create({
+        ...transaction,
+        TransactionType: transaction.TransactionType
+          ? transaction.TransactionType
+          : 'DEBIT',
+        TransactionStatus: transaction.TransactionStatus
+          ? transaction.TransactionStatus
+          : 'COMPLETE',
+      });
+    } else {
+      await this.loanTransactionService.create({
+        ...transaction,
+        TransactionStatus: transaction.TransactionStatus
+          ? transaction.TransactionStatus
+          : 'COMPLETE',
+      });
+    }
 
     return braintreeTransactionResponse;
   }
