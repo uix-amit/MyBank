@@ -1,11 +1,18 @@
 import { Module } from '@nestjs/common';
+
+import { NotificationsService } from '@notifications/notifications.service';
+import { MailerService } from '@sharedServices/mailer/mailer.service';
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 import { IdValidationDto } from '@sharedValidators/id-validation-dto';
-import { MailerService } from './services/mailer/mailer.service';
 
 @Module({
   imports: [IdValidationDto],
-  providers: [PrismaService, MailerService],
-  exports: [PrismaService, IdValidationDto, MailerService],
+  providers: [PrismaService, MailerService, NotificationsService],
+  exports: [
+    PrismaService,
+    IdValidationDto,
+    MailerService,
+    NotificationsService,
+  ],
 })
 export class SharedModule {}

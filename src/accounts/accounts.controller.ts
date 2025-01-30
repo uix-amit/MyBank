@@ -16,6 +16,7 @@ import { AccountsService } from '@accounts/accounts.service';
 import { CreateAccountDto } from '@accounts/dto/create-account-dto';
 import { UpdateAccountDto } from '@accounts/dto/update-account-dto';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Savings Account')
@@ -28,7 +29,10 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 @UseGuards(JwtAuthGuard)
 @Controller({ path: 'savings-account', version: '1' })
 export class AccountsController {
-  constructor(private readonly accountsService: AccountsService) {}
+  constructor(
+    private readonly accountsService: AccountsService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   @Post()
   async create(
@@ -36,7 +40,15 @@ export class AccountsController {
     @Body() createAccountDto: CreateAccountDto,
   ): Promise<SavingsAccount> {
     const UserID = req.user.UserID;
-    return this.accountsService.create({ ...createAccountDto, UserID });
+    const savingsAccount = await this.accountsService.create({
+      ...createAccountDto,
+      UserID,
+    });
+    this.notificationsService.create({
+      Message: `Congratulations! Your new savings account ${savingsAccount.AccountNumber} has been created successfully.`,
+      UserID,
+    });
+    return savingsAccount;
   }
 
   @Get()

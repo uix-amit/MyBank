@@ -18,6 +18,7 @@ import { CreateLoanTransactionDto } from '@loan-transactions/dto/create-loan-tra
 import { UpdateLoanTransactionDto } from '@loan-transactions/dto/update-loan-transaction.dto';
 import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
 import { LoansService } from '@loans/loans.service';
+import { NotificationsService } from '@notifications/notifications.service';
 import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 
 @ApiTags('Loan Account Transactions')
@@ -34,11 +35,15 @@ export class LoanTransactionsController {
     private readonly loanTransactionsService: LoanTransactionsService,
     private readonly loansService: LoansService,
     private readonly accountsService: AccountsService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @Post()
-  async create(@Body() createLoanTransactionDto: CreateLoanTransactionDto) {
-    const loanTransaction = this.loanTransactionsService.create({
+  async create(
+    @Request() req: any,
+    @Body() createLoanTransactionDto: CreateLoanTransactionDto,
+  ) {
+    const loanTransaction = await this.loanTransactionsService.create({
       ...createLoanTransactionDto,
       TransactionStatus: createLoanTransactionDto.TransactionStatus
         ? createLoanTransactionDto.TransactionStatus
@@ -55,6 +60,10 @@ export class LoanTransactionsController {
     });
     await this.loansService.update(createLoanTransactionDto.ToAccountID, {
       LoanAmount: toAccount.LoanAmount - createLoanTransactionDto.Amount,
+    });
+    this.notificationsService.create({
+      Message: `Congratulations! Your new transaction of ${loanTransaction.Amount} has been processed successfully.`,
+      UserID: req.user.UserID,
     });
     return loanTransaction;
   }

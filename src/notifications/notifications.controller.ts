@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
@@ -37,8 +38,8 @@ export class NotificationsController {
   }
 
   @Get()
-  async findAll(): Promise<Notifications[]> {
-    return this.notificationsService.findAll();
+  async findAll(@Request() req: any): Promise<Notifications[]> {
+    return this.notificationsService.findAll(req.user.UserID);
   }
 
   @Get(':id')
@@ -46,6 +47,19 @@ export class NotificationsController {
     @Param() idValidationDto: IdValidationDto,
   ): Promise<Notifications> {
     return this.notificationsService.findOne(idValidationDto.id);
+  }
+
+  @Patch('/toggle-read')
+  async toggleRead(
+    @Request() req: any,
+    @Body()
+    { notificationIds, IsRead }: { notificationIds: string[]; IsRead: boolean },
+  ): Promise<Notifications[]> {
+    return this.notificationsService.toggleRead(
+      req.user.UserID,
+      notificationIds,
+      IsRead,
+    );
   }
 
   @Patch(':id')

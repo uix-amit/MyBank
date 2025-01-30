@@ -15,11 +15,12 @@ import { SavingsAccount, Transactions } from '@prisma/client';
 
 import { AccountsService } from '@accounts/accounts.service';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '@notifications/notifications.service';
+import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
 import { UpdateTransactionDto } from '@transactions/dto/update-transaction-dto';
 import { TransactionsService } from '@transactions/transactions.service';
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('Authorization')
@@ -34,10 +35,12 @@ export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
     private readonly accountsService: AccountsService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @Post()
   async create(
+    @Request() req: any,
     @Body() createTransactionDto: CreateTransactionDto,
   ): Promise<Transactions> {
     const transation = await this.transactionsService.create({
@@ -59,6 +62,10 @@ export class TransactionsController {
     );
     this.accountsService.update(createTransactionDto.ToAccountID, {
       Balance: toAccountDetails.Balance + createTransactionDto.Amount,
+    });
+    this.notificationsService.create({
+      Message: `Congratulations! Your new transaction of ${transation.Amount} has been processed successfully.`,
+      UserID: req.user.UserID,
     });
     return transation;
   }

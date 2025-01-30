@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CardsService } from '@cards/cards.service';
 import { CreateCardDto } from '@cards/dto/create-card-dto';
 import { UpdateCardDto } from '@cards/dto/update-card-dto';
+import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Cards')
@@ -28,11 +29,22 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 @UseGuards(JwtAuthGuard)
 @Controller({ path: 'cards', version: '1' })
 export class CardsController {
-  constructor(private readonly cardsService: CardsService) {}
+  constructor(
+    private readonly cardsService: CardsService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   @Post()
-  async create(@Body() createCardDto: CreateCardDto): Promise<Cards> {
-    return this.cardsService.create(createCardDto);
+  async create(
+    @Request() req: any,
+    @Body() createCardDto: CreateCardDto,
+  ): Promise<Cards> {
+    const card = await this.cardsService.create(createCardDto);
+    this.notificationsService.create({
+      Message: `Congratulations! Your new card ${card.CardNumber} has been created successfully.`,
+      UserID: req.user.UserID,
+    });
+    return card;
   }
 
   @Get()

@@ -14,11 +14,12 @@ import { Users } from '@prisma/client';
 
 import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 import { IsPublic } from '@auth/is-public/is-public.decorator';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
 import { UsersService } from '@users/users.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth('Authorization')
@@ -27,6 +28,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly accountPreferencesService: AccountPreferencesService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @IsPublic()
@@ -68,10 +70,19 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
+    @Request() req: any,
     @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<Users> {
-    return this.usersService.update(idValidationDto.id, updateUserDto);
+    const user = await this.usersService.update(
+      idValidationDto.id,
+      updateUserDto,
+    );
+    this.notificationsService.create({
+      UserID: req.user.UserID,
+      Message: `Dear ${user.FirstName} ${user.LastName}, your ${updateUserDto.Password ? 'password' : 'profile'} has been updated successfully!`,
+    });
+    return user;
   }
 
   @ApiHeader({

@@ -15,8 +15,9 @@ import { AccountPreferences } from '@prisma/client';
 import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 import { CreateAccountPreferencesDto } from '@accountPreferences/dto/create-account-preferences-dto';
 import { UpdateAccountPreferencesDto } from '@accountPreferences/dto/update-account-preferences-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '@notifications/notifications.service';
+import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Account Preferences')
 @ApiBearerAuth('Authorization')
@@ -30,6 +31,7 @@ import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 export class AccountPreferencesController {
   constructor(
     private readonly accountPreferencesService: AccountPreferencesService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @Post()
@@ -57,11 +59,19 @@ export class AccountPreferencesController {
     @Param() idValidationDto: IdValidationDto,
     @Body() updateAccountPreferenceDto: UpdateAccountPreferencesDto,
   ): Promise<AccountPreferences> {
-    return this.accountPreferencesService.update(idValidationDto.id, {
-      ...updateAccountPreferenceDto,
+    const accountPreferences = this.accountPreferencesService.update(
+      idValidationDto.id,
+      {
+        ...updateAccountPreferenceDto,
+        UserID: req.user.UserID,
+        AccountPreferenceID: idValidationDto.id,
+      },
+    );
+    this.notificationsService.create({
+      Message: 'Your account preferences have been updated successfully!',
       UserID: req.user.UserID,
-      AccountPreferenceID: idValidationDto.id,
     });
+    return accountPreferences;
   }
 
   @Delete(':id')

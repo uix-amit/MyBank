@@ -15,8 +15,13 @@ export class NotificationsService {
     });
   }
 
-  async findAll(): Promise<Notifications[]> {
-    return await this.prismaService.notifications.findMany();
+  async findAll(UserID: string): Promise<Notifications[]> {
+    return await this.prismaService.notifications.findMany({
+      where: { UserID },
+      orderBy: {
+        CreatedAt: 'desc',
+      },
+    });
   }
 
   async findOne(NotificationID: string): Promise<Notifications> {
@@ -32,6 +37,24 @@ export class NotificationsService {
     return await this.prismaService.notifications.update({
       where: { NotificationID },
       data: updateNotificationDto,
+    });
+  }
+
+  async toggleRead(
+    UserID: string,
+    NotificationIDs: string[],
+    IsRead: boolean = true,
+  ): Promise<Notifications[]> {
+    return await this.prismaService.notifications.updateManyAndReturn({
+      where: {
+        UserID,
+        NotificationID: {
+          in: NotificationIDs,
+        },
+      },
+      data: {
+        IsRead,
+      },
     });
   }
 

@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateLoanDto } from '@loans/dto/create-loan-dto';
 import { UpdateLoanDto } from '@loans/dto/update-loan-dto';
 import { LoansService } from '@loans/loans.service';
+import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Loans')
@@ -29,7 +30,10 @@ import { IdValidationDto } from '@shared/validators/id-validation-dto';
 @UseGuards(JwtAuthGuard)
 @Controller({ path: 'loans', version: '1' })
 export class LoansController {
-  constructor(private readonly loansService: LoansService) {}
+  constructor(
+    private readonly loansService: LoansService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   @Post()
   async create(
@@ -38,7 +42,16 @@ export class LoansController {
   ): Promise<Loans> {
     const UserID = req.user.UserID;
     const LoanEndDate = addYears(new Date(), createLoanDto.LoanTerm);
-    return this.loansService.create({ ...createLoanDto, UserID, LoanEndDate });
+    const loanAccount = await this.loansService.create({
+      ...createLoanDto,
+      UserID,
+      LoanEndDate,
+    });
+    this.notificationsService.create({
+      Message: `Congratulations! Your new loan account ${loanAccount.AccountNumber} has been created successfully.`,
+      UserID,
+    });
+    return loanAccount;
   }
 
   @Get()
