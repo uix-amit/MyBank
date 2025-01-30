@@ -6,17 +6,19 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 
+import { AccountsService } from '@accounts/accounts.service';
+import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateLoanTransactionDto } from '@loan-transactions/dto/create-loan-transaction.dto';
 import { UpdateLoanTransactionDto } from '@loan-transactions/dto/update-loan-transaction.dto';
 import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
 import { LoansService } from '@loans/loans.service';
-import { AccountsService } from '@accounts/accounts.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
+import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 
 @ApiTags('Loan Account Transactions')
 @ApiBearerAuth('Authorization')
@@ -60,6 +62,17 @@ export class LoanTransactionsController {
   @Get()
   async findAll(@Request() req: any) {
     return this.loanTransactionsService.findAll(req.user.UserID);
+  }
+
+  @Get('/filter')
+  async findAllByFilter(
+    @Request() req: any,
+    @Query() filters: FilterTransactionsDto,
+  ) {
+    return this.loanTransactionsService.findAllByFilter(
+      req.user.UserID,
+      filters,
+    );
   }
 
   @Get(':id')

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { LoanTransactions, Prisma } from '@prisma/client';
+import { LoanTransactions, LoanType, Prisma } from '@prisma/client';
+import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 import { PrismaService } from '@shared/services/prisma/prisma.service';
 
 @Injectable()
@@ -16,6 +17,42 @@ export class LoanTransactionsService {
   async findAll(UserID: string): Promise<LoanTransactions[]> {
     return await this.prismaService.loanTransactions.findMany({
       where: {
+        OR: [
+          {
+            FromAccount: { UserID },
+          },
+          {
+            ToAccount: { UserID },
+          },
+        ],
+      },
+      include: {
+        FromAccount: true,
+        ToAccount: true,
+      },
+      orderBy: {
+        TransactionDate: 'desc',
+      },
+    });
+  }
+
+  async findAllByFilter(
+    UserID: string,
+    filter: FilterTransactionsDto,
+  ): Promise<LoanTransactions[]> {
+    return await this.prismaService.loanTransactions.findMany({
+      where: {
+        Amount: {
+          gte: filter.MinAmount,
+          lte: filter.MaxAmount,
+        },
+        ToAccount: {
+          LoanType: filter.TransactionType as LoanType,
+        },
+        TransactionDate: {
+          gte: filter.StartDate,
+          lte: filter.EndDate,
+        },
         OR: [
           {
             FromAccount: { UserID },

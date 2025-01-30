@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Transactions } from '@prisma/client';
+import { Prisma, TransactionType, Transactions } from '@prisma/client';
 import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
@@ -48,7 +48,7 @@ export class TransactionsService {
   ): Promise<Transactions[]> {
     return await this.prismaService.transactions.findMany({
       where: {
-        TransactionType: filters.TransactionType,
+        TransactionType: filters.TransactionType as TransactionType,
         Amount: {
           gte: filters.MinAmount,
           lte: filters.MaxAmount,
