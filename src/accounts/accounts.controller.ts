@@ -61,8 +61,6 @@ export class AccountsController {
 
   @Get('banks')
   async findAllBanks(): Promise<Banks[]> {
-    console.log('findAllBanks');
-
     return this.accountsService.getBanks();
   }
 

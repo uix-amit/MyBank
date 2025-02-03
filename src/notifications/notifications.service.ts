@@ -15,9 +15,9 @@ export class NotificationsService {
     });
   }
 
-  async findAll(UserID: string): Promise<Notifications[]> {
+  async findAll(UserID: string, filters?: any): Promise<Notifications[]> {
     return await this.prismaService.notifications.findMany({
-      where: { UserID },
+      where: { UserID, IsRead: filters?.IsRead },
       orderBy: {
         CreatedAt: 'desc',
       },

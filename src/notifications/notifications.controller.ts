@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateNotificationDto } from '@notifications/dto/create-notification-dto';
 import { UpdateNotificationDto } from '@notifications/dto/update-notification-dto';
 import { NotificationsService } from '@notifications/notifications.service';
+import { FilterNotificationsDto } from '@shared/classes/filter-notifications-dto';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Notifications')
@@ -38,8 +40,13 @@ export class NotificationsController {
   }
 
   @Get()
-  async findAll(@Request() req: any): Promise<Notifications[]> {
-    return this.notificationsService.findAll(req.user.UserID);
+  async findAll(
+    @Request() req: any,
+    @Query() query: FilterNotificationsDto,
+  ): Promise<Notifications[]> {
+    console.log(query);
+
+    return this.notificationsService.findAll(req.user.UserID, query);
   }
 
   @Get(':id')

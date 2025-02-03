@@ -31,9 +31,6 @@ export class AccountsService {
   }
 
   async getBanks(): Promise<Banks[]> {
-    const banks = await this.prismaService.banks.findMany();
-    console.log(JSON.stringify(banks));
-
     return await this.prismaService.banks.findMany();
   }
 
