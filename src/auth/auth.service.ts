@@ -9,6 +9,7 @@ import { TwoFactorAuth, Users } from '@prisma/client';
 import ejs from 'ejs';
 import path from 'path';
 
+import { PasswordService } from '@shared/password/password.service';
 import { MailerService } from '@shared/services/mailer/mailer.service';
 import { TwoFactorAuthService } from '@two-factor-auth/two-factor-auth.service';
 import { UsersService } from '@users/users.service';
@@ -22,11 +23,16 @@ export class AuthService {
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
     private readonly twoFactorAuthService: TwoFactorAuthService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findOneByUsername(username);
-    if (user && user.Password === password) {
+    const isPasswordValid = await this.passwordService.comparePasswords(
+      password,
+      user.Password,
+    );
+    if (user && isPasswordValid) {
       /* eslint-disable @typescript-eslint/no-unused-vars */
       const { Password, ...result } = user;
       return result;

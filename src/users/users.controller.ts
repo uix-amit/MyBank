@@ -16,6 +16,7 @@ import { AccountPreferencesService } from '@accountPreferences/account-preferenc
 import { IsPublic } from '@auth/is-public/is-public.decorator';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { NotificationsService } from '@notifications/notifications.service';
+import { PasswordService } from '@shared/password/password.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 import { CreateUserDto } from '@users/dto/create-user-dto';
 import { UpdateUserDto } from '@users/dto/update-user-dto';
@@ -29,12 +30,19 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly accountPreferencesService: AccountPreferencesService,
     private readonly notificationsService: NotificationsService,
+    private readonly passwordService: PasswordService,
   ) {}
 
   @IsPublic()
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<Users> {
-    const user = await this.usersService.create(createUserDto);
+    const hashedPassword = await this.passwordService.hashPassword(
+      createUserDto.Password,
+    );
+    const user = await this.usersService.create({
+      ...createUserDto,
+      Password: hashedPassword,
+    });
     this.accountPreferencesService.create({
       UserID: user.UserID,
     });
@@ -74,10 +82,16 @@ export class UsersController {
     @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<Users> {
-    const user = await this.usersService.update(
-      idValidationDto.id,
-      updateUserDto,
-    );
+    let hashedPassword = null;
+    if (updateUserDto.Password) {
+      hashedPassword = await this.passwordService.hashPassword(
+        updateUserDto.Password,
+      );
+    }
+    const user = await this.usersService.update(idValidationDto.id, {
+      ...updateUserDto,
+      ...(updateUserDto.Password && { Password: hashedPassword }),
+    });
     this.notificationsService.create({
       UserID: req.user.UserID,
       Message: `Dear ${user.FirstName} ${user.LastName}, your ${updateUserDto.Password ? 'password' : 'profile'} has been updated successfully!`,
