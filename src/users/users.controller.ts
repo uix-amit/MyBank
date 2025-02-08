@@ -56,7 +56,7 @@ export class UsersController {
   })
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Request() req: any): Promise<Users> {
+  async findAll(@Request() req: any): Promise<Omit<Users, 'Password'>> {
     return this.usersService.findOne(req.user.UserID);
   }
 
@@ -66,7 +66,9 @@ export class UsersController {
     required: true,
   })
   @Get(':id')
-  async findOne(@Param() idValidationDto: IdValidationDto): Promise<Users> {
+  async findOne(
+    @Param() idValidationDto: IdValidationDto,
+  ): Promise<Omit<Users, 'Password'>> {
     return this.usersService.findOne(idValidationDto.id);
   }
 
@@ -82,7 +84,7 @@ export class UsersController {
     @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<Users> {
-    let hashedPassword = null;
+    let hashedPassword = '';
     if (updateUserDto.Password) {
       hashedPassword = await this.passwordService.hashPassword(
         updateUserDto.Password,
@@ -90,11 +92,11 @@ export class UsersController {
     }
     const user = await this.usersService.update(idValidationDto.id, {
       ...updateUserDto,
-      ...(updateUserDto.Password && { Password: hashedPassword }),
+      ...(hashedPassword && { Password: hashedPassword }),
     });
     this.notificationsService.create({
       UserID: req.user.UserID,
-      Message: `Dear ${user.FirstName} ${user.LastName}, your ${updateUserDto.Password ? 'password' : 'profile'} has been updated successfully!`,
+      Message: `Dear ${user.FirstName} ${user.LastName}, your ${hashedPassword ? 'password' : 'profile'} has been updated successfully!`,
     });
     return user;
   }

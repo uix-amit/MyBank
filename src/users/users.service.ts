@@ -15,10 +15,21 @@ export class UsersService {
     return this.prismaService.users.findMany();
   }
 
-  findOne(UserID: string): Promise<Users> {
+  findOne(UserID: string): Promise<Omit<Users, 'Password'>> {
     return this.prismaService.users.findFirst({
       where: {
         UserID,
+      },
+      select: {
+        UserID: true,
+        FirstName: true,
+        LastName: true,
+        Email: true,
+        UserName: true,
+        PhoneNumber: true,
+        DateOfBirth: true,
+        CreatedAt: true,
+        UpdatedAt: true,
       },
     });
   }
