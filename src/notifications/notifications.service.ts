@@ -44,8 +44,8 @@ export class NotificationsService {
     UserID: string,
     NotificationIDs: string[],
     IsRead: boolean = true,
-  ): Promise<Notifications[]> {
-    return await this.prismaService.notifications.updateManyAndReturn({
+  ): Promise<Prisma.BatchPayload> {
+    return await this.prismaService.notifications.updateMany({
       where: {
         UserID,
         NotificationID: {

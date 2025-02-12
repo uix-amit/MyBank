@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
-import { Notifications } from '@prisma/client';
+import { Notifications, Prisma } from '@prisma/client';
 
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { CreateNotificationDto } from '@notifications/dto/create-notification-dto';
@@ -44,8 +44,6 @@ export class NotificationsController {
     @Request() req: any,
     @Query() query: FilterNotificationsDto,
   ): Promise<Notifications[]> {
-    console.log(query);
-
     return this.notificationsService.findAll(req.user.UserID, query);
   }
 
@@ -61,7 +59,7 @@ export class NotificationsController {
     @Request() req: any,
     @Body()
     { notificationIds, IsRead }: { notificationIds: string[]; IsRead: boolean },
-  ): Promise<Notifications[]> {
+  ): Promise<Prisma.BatchPayload> {
     return this.notificationsService.toggleRead(
       req.user.UserID,
       notificationIds,
