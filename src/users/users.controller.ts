@@ -83,7 +83,7 @@ export class UsersController {
     @Request() req: any,
     @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<Users> {
+  ): Promise<Omit<Users, 'Password'>> {
     let hashedPassword = '';
     if (updateUserDto.Password) {
       hashedPassword = await this.passwordService.hashPassword(

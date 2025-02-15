@@ -42,10 +42,24 @@ export class UsersService {
     });
   }
 
-  update(UserID: string, updateUserDto: Prisma.UsersUncheckedUpdateInput) {
+  update(
+    UserID: string,
+    updateUserDto: Prisma.UsersUncheckedUpdateInput,
+  ): Promise<Omit<Users, 'Password'>> {
     return this.prismaService.users.update({
       where: {
         UserID,
+      },
+      select: {
+        UserID: true,
+        FirstName: true,
+        LastName: true,
+        Email: true,
+        UserName: true,
+        PhoneNumber: true,
+        DateOfBirth: true,
+        CreatedAt: true,
+        UpdatedAt: true,
       },
       data: updateUserDto,
     });
