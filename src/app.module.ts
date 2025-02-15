@@ -28,7 +28,7 @@ import { LoanTransactionsModule } from './loan-transactions/loan-transactions.mo
     ThrottlerModule.forRoot([
       {
         ttl: 60 * 1000,
-        limit: 10,
+        limit: parseInt(process.env.THROTTLE_LIMIT),
       },
     ]),
     SharedModule,
