@@ -71,16 +71,11 @@ export class TransactionsController {
   }
 
   @Get()
-  async findAll(@Request() req: any): Promise<Transactions[]> {
-    return this.transactionsService.findAll(req.user.UserID);
-  }
-
-  @Get('filter')
-  async findAllByFilter(
+  async findAll(
     @Request() req: any,
     @Query() filterDto: FilterTransactionsDto,
   ): Promise<Transactions[]> {
-    return this.transactionsService.findAllByFilter(req.user.UserID, filterDto);
+    return this.transactionsService.findAll(req.user.UserID, filterDto);
   }
 
   @Get(':id')
