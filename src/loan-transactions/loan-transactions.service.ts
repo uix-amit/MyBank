@@ -14,29 +14,7 @@ export class LoanTransactionsService {
     });
   }
 
-  async findAll(UserID: string): Promise<LoanTransactions[]> {
-    return await this.prismaService.loanTransactions.findMany({
-      where: {
-        OR: [
-          {
-            FromAccount: { UserID },
-          },
-          {
-            ToAccount: { UserID },
-          },
-        ],
-      },
-      include: {
-        FromAccount: true,
-        ToAccount: true,
-      },
-      orderBy: {
-        TransactionDate: 'desc',
-      },
-    });
-  }
-
-  async findAllByFilter(
+  async findAll(
     UserID: string,
     filter: FilterTransactionsDto,
   ): Promise<LoanTransactions[]> {

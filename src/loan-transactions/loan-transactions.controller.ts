@@ -69,19 +69,8 @@ export class LoanTransactionsController {
   }
 
   @Get()
-  async findAll(@Request() req: any) {
-    return this.loanTransactionsService.findAll(req.user.UserID);
-  }
-
-  @Get('/filter')
-  async findAllByFilter(
-    @Request() req: any,
-    @Query() filters: FilterTransactionsDto,
-  ) {
-    return this.loanTransactionsService.findAllByFilter(
-      req.user.UserID,
-      filters,
-    );
+  async findAll(@Request() req: any, @Query() filters: FilterTransactionsDto) {
+    return this.loanTransactionsService.findAll(req.user.UserID, filters);
   }
 
   @Get(':id')
