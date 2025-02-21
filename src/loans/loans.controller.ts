@@ -39,19 +39,20 @@ export class LoansController {
   async create(
     @Request() req: any,
     @Body() createLoanDto: CreateLoanDto,
-  ): Promise<Loans> {
+  ): Promise<{ message: string }> {
     const UserID = req.user.UserID;
     const LoanEndDate = addYears(new Date(), createLoanDto.LoanTerm);
-    const loanAccount = await this.loansService.create({
+    await this.loansService.create({
       ...createLoanDto,
       UserID,
       LoanEndDate,
     });
+    const message: string = `Congratulations! Your new loan account ${createLoanDto.AccountNumber} has been created successfully.`;
     this.notificationsService.create({
-      Message: `Congratulations! Your new loan account ${loanAccount.AccountNumber} has been created successfully.`,
+      Message: message,
       UserID,
     });
-    return loanAccount;
+    return { message };
   }
 
   @Get()

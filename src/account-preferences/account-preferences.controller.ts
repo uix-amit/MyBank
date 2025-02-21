@@ -58,20 +58,19 @@ export class AccountPreferencesController {
     @Request() req: any,
     @Param() idValidationDto: IdValidationDto,
     @Body() updateAccountPreferenceDto: UpdateAccountPreferencesDto,
-  ): Promise<AccountPreferences> {
-    const accountPreferences = this.accountPreferencesService.update(
-      idValidationDto.id,
-      {
-        ...updateAccountPreferenceDto,
-        UserID: req.user.UserID,
-        AccountPreferenceID: idValidationDto.id,
-      },
-    );
+  ): Promise<{ message: string }> {
+    await this.accountPreferencesService.update(idValidationDto.id, {
+      ...updateAccountPreferenceDto,
+      UserID: req.user.UserID,
+      AccountPreferenceID: idValidationDto.id,
+    });
+    const message: string =
+      'Your account preferences have been updated successfully!';
     this.notificationsService.create({
-      Message: 'Your account preferences have been updated successfully!',
+      Message: message,
       UserID: req.user.UserID,
     });
-    return accountPreferences;
+    return { message };
   }
 
   @Delete(':id')

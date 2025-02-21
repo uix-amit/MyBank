@@ -51,12 +51,12 @@ export class BraintreeController {
       transaction: CreateTransactionDto;
       transactionType: 'Transfer' | 'LoanRepayment';
     },
-  ) {
+  ): Promise<{ message: string }> {
     const { nonce, transaction, transactionType } = body;
-    const braintreeTransactionResponse =
-      await this.braintreeService.processPayment(transaction.Amount, nonce);
+    let message: string;
+    await this.braintreeService.processPayment(transaction.Amount, nonce);
     if (transactionType === 'Transfer') {
-      const newTransaction = await this.transactionService.create({
+      await this.transactionService.create({
         ...transaction,
         TransactionType: transaction.TransactionType
           ? transaction.TransactionType
@@ -75,12 +75,13 @@ export class BraintreeController {
       this.accountsService.update(transaction.ToAccountID, {
         Balance: toAccountDetails.Balance + transaction.Amount,
       });
+      message = `Congratulations! Your new transaction of ${transaction.Amount} has been processed successfully.`;
       this.notificationsService.create({
-        Message: `Congratulations! Your new transaction of ${newTransaction.Amount} has been processed successfully.`,
+        Message: message,
         UserID: req.user.UserID,
       });
     } else {
-      const loanTransaction = await this.loanTransactionService.create({
+      await this.loanTransactionService.create({
         ...transaction,
         TransactionStatus: transaction.TransactionStatus
           ? transaction.TransactionStatus
@@ -98,13 +99,13 @@ export class BraintreeController {
       await this.loansService.update(transaction.ToAccountID, {
         LoanAmount: toAccount.LoanAmount - transaction.Amount,
       });
+      message = `Congratulations! Your new transaction of ${transaction.Amount} has been processed successfully.`;
       this.notificationsService.create({
-        Message: `Congratulations! Your new transaction of ${loanTransaction.Amount} has been processed successfully.`,
+        Message: message,
         UserID: req.user.UserID,
       });
-      return loanTransaction;
     }
 
-    return braintreeTransactionResponse;
+    return { message };
   }
 }

@@ -38,13 +38,14 @@ export class CardsController {
   async create(
     @Request() req: any,
     @Body() createCardDto: CreateCardDto,
-  ): Promise<Cards> {
-    const card = await this.cardsService.create(createCardDto);
+  ): Promise<{ message: string }> {
+    await this.cardsService.create(createCardDto);
+    const message: string = `Congratulations! Your new card ${createCardDto.CardNumber} has been created successfully.`;
     this.notificationsService.create({
-      Message: `Congratulations! Your new card ${card.CardNumber} has been created successfully.`,
+      Message: message,
       UserID: req.user.UserID,
     });
-    return card;
+    return { message };
   }
 
   @Get()

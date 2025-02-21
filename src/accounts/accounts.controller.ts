@@ -38,17 +38,15 @@ export class AccountsController {
   async create(
     @Request() req: any,
     @Body() createAccountDto: CreateAccountDto,
-  ): Promise<SavingsAccount> {
+  ): Promise<{ message: string }> {
     const UserID = req.user.UserID;
-    const savingsAccount = await this.accountsService.create({
+    await this.accountsService.create({
       ...createAccountDto,
       UserID,
     });
-    this.notificationsService.create({
-      Message: `Congratulations! Your new savings account ${savingsAccount.AccountNumber} has been created successfully.`,
-      UserID,
-    });
-    return savingsAccount;
+    const message: string = `Congratulations! Your new savings account ${createAccountDto.AccountNumber} has been created successfully.`;
+    this.notificationsService.create({ Message: message, UserID });
+    return { message };
   }
 
   @Get()

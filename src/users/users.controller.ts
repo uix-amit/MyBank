@@ -83,22 +83,23 @@ export class UsersController {
     @Request() req: any,
     @Param() idValidationDto: IdValidationDto,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<Omit<Users, 'Password'>> {
+  ): Promise<{ message: string }> {
     let hashedPassword = '';
     if (updateUserDto.Password) {
       hashedPassword = await this.passwordService.hashPassword(
         updateUserDto.Password,
       );
     }
-    const user = await this.usersService.update(idValidationDto.id, {
+    await this.usersService.update(idValidationDto.id, {
       ...updateUserDto,
       ...(hashedPassword && { Password: hashedPassword }),
     });
+    const message: string = `Dear ${updateUserDto.FirstName} ${updateUserDto.LastName}, your ${hashedPassword ? 'password' : 'profile'} has been updated successfully!`;
     this.notificationsService.create({
       UserID: req.user.UserID,
-      Message: `Dear ${user.FirstName} ${user.LastName}, your ${hashedPassword ? 'password' : 'profile'} has been updated successfully!`,
+      Message: message,
     });
-    return user;
+    return { message };
   }
 
   @ApiHeader({
