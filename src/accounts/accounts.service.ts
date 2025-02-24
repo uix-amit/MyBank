@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Banks, Prisma, SavingsAccount } from '@prisma/client';
+import { AccountStatsDto } from '@shared/classes/account-stats-dto';
 
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
@@ -28,6 +29,62 @@ export class AccountsService {
         },
       },
     });
+  }
+
+  async getAccountStats(UserID: string): Promise<AccountStatsDto> {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const totalBalanceResult =
+      await this.prismaService.savingsAccount.aggregate({
+        where: { UserID },
+        _sum: {
+          Balance: true,
+        },
+      });
+
+    const debitTransactions = await this.prismaService.transactions.aggregate({
+      where: {
+        FromAccount: { UserID },
+        TransactionDate: {
+          gte: thirtyDaysAgo,
+        },
+      },
+      _sum: {
+        Amount: true,
+      },
+      _count: {
+        Amount: true,
+      },
+    });
+
+    const creditTransactions = await this.prismaService.transactions.aggregate({
+      where: {
+        ToAccount: { UserID },
+        TransactionDate: {
+          gte: thirtyDaysAgo,
+        },
+      },
+      _sum: {
+        Amount: true,
+      },
+      _count: {
+        Amount: true,
+      },
+    });
+
+    return {
+      Balance: totalBalanceResult._sum.Balance || 0,
+      Income: {
+        numberOfTransactions: creditTransactions._count.Amount,
+        amountOfTransactions: creditTransactions._sum.Amount,
+      },
+      Expenses: {
+        numberOfTransactions: debitTransactions._count.Amount,
+        amountOfTransactions: debitTransactions._sum.Amount,
+      },
+      Savings: creditTransactions._sum.Amount - debitTransactions._sum.Amount,
+    };
   }
 
   async getBanks(): Promise<Banks[]> {

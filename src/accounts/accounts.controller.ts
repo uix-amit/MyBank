@@ -18,6 +18,7 @@ import { UpdateAccountDto } from '@accounts/dto/update-account-dto';
 import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
 import { NotificationsService } from '@notifications/notifications.service';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { AccountStatsDto } from '@shared/classes/account-stats-dto';
 
 @ApiTags('Savings Account')
 @ApiBearerAuth('Authorization')
@@ -60,6 +61,11 @@ export class AccountsController {
   @Get('banks')
   async findAllBanks(): Promise<Banks[]> {
     return this.accountsService.getBanks();
+  }
+
+  @Get('stats')
+  async getAccountStats(@Request() req: any): Promise<AccountStatsDto> {
+    return this.accountsService.getAccountStats(req.user.UserID);
   }
 
   @Get(':id')
