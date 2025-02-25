@@ -18,6 +18,7 @@ import { CreateLoanDto } from '@loans/dto/create-loan-dto';
 import { UpdateLoanDto } from '@loans/dto/update-loan-dto';
 import { LoansService } from '@loans/loans.service';
 import { NotificationsService } from '@notifications/notifications.service';
+import { LoanAccountStatsDto } from '@shared/classes/loan-account-stats-dto';
 import { IdValidationDto } from '@shared/validators/id-validation-dto';
 
 @ApiTags('Loans')
@@ -58,6 +59,11 @@ export class LoansController {
   @Get()
   async findAll(@Request() req: any): Promise<Loans[]> {
     return this.loansService.findAll(req.user.UserID);
+  }
+
+  @Get('stats')
+  async getAccountStats(@Request() req: any): Promise<LoanAccountStatsDto> {
+    return this.loansService.getLoanAccountStats(req.user.UserID);
   }
 
   @Get(':id')
