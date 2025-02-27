@@ -18,8 +18,13 @@ export class AccountsService {
 
   async findAll(
     UserID: string,
+    limit?: number,
   ): Promise<Array<SavingsAccount & { Bank: { BankName: string } }>> {
     return await this.prismaService.savingsAccount.findMany({
+      orderBy: {
+        UpdatedAt: 'desc',
+      },
+      take: limit,
       where: { UserID },
       include: {
         Bank: {
@@ -28,6 +33,46 @@ export class AccountsService {
           },
         },
       },
+    });
+  }
+
+  async getBalanceGroupByBank(UserID: string): Promise<
+    {
+      BankName: string;
+      TotalBalance: number;
+    }[]
+  > {
+    // Step 1: Perform groupBy to get the total balance per BankID for a given UserID
+    const groupByResult = await this.prismaService.savingsAccount.groupBy({
+      by: ['BankID'],
+      _sum: {
+        Balance: true,
+      },
+      where: {
+        UserID, // Use the actual UserID value here
+      },
+    });
+
+    // Step 2: Fetch the BankName from the Banks table using the BankIDs
+    const bankIds = groupByResult.map((item) => item.BankID);
+
+    const banks = await this.prismaService.banks.findMany({
+      where: {
+        BankID: { in: bankIds }, // Filter Banks by the BankIDs obtained from the first query
+      },
+      select: {
+        BankID: true,
+        BankName: true, // Only select the BankName field
+      },
+    });
+
+    // Step 3: Combine the results (groupByResult with BankName)
+    return groupByResult.map((group) => {
+      const bank = banks.find((b) => b.BankID === group.BankID);
+      return {
+        BankName: bank?.BankName,
+        TotalBalance: group._sum.Balance,
+      };
     });
   }
 

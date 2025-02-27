@@ -9,5 +9,6 @@ import { TransactionsService } from '@transactions/transactions.service';
   imports: [SharedModule, AccountsModule],
   controllers: [TransactionsController],
   providers: [TransactionsService],
+  exports: [TransactionsService],
 })
 export class TransactionsModule {}

@@ -16,7 +16,8 @@ export class LoanTransactionsService {
 
   async findAll(
     UserID: string,
-    filter: FilterTransactionsDto,
+    filter?: FilterTransactionsDto,
+    limit?: number,
   ): Promise<LoanTransactions[]> {
     return await this.prismaService.loanTransactions.findMany({
       where: {
@@ -40,6 +41,7 @@ export class LoanTransactionsService {
           },
         ],
       },
+      take: limit,
       include: {
         FromAccount: true,
         ToAccount: true,

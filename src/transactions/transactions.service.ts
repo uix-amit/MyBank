@@ -18,7 +18,8 @@ export class TransactionsService {
 
   async findAll(
     UserID: string,
-    filters: FilterTransactionsDto,
+    filters?: FilterTransactionsDto,
+    limit?: number,
   ): Promise<Transactions[]> {
     return await this.prismaService.transactions.findMany({
       where: {
@@ -44,9 +45,42 @@ export class TransactionsService {
           },
         ],
       },
+      take: limit,
       include: {
         FromAccount: true,
         ToAccount: true,
+      },
+      orderBy: {
+        TransactionDate: 'desc',
+      },
+    });
+  }
+
+  async getWeeklyTransactions(UserID: string) {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    return await this.prismaService.transactions.groupBy({
+      by: ['TransactionType', 'TransactionDate'],
+      where: {
+        TransactionDate: {
+          gte: sevenDaysAgo,
+        },
+        OR: [
+          {
+            FromAccount: {
+              UserID,
+            },
+          },
+          {
+            ToAccount: {
+              UserID,
+            },
+          },
+        ],
+      },
+      _sum: {
+        Amount: true,
       },
       orderBy: {
         TransactionDate: 'desc',
