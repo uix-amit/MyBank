@@ -23,14 +23,14 @@ export class TransactionsService {
   ): Promise<Transactions[]> {
     return await this.prismaService.transactions.findMany({
       where: {
-        TransactionType: filters.TransactionType as TransactionType,
+        TransactionType: filters?.TransactionType as TransactionType,
         Amount: {
-          gte: filters.MinAmount,
-          lte: filters.MaxAmount,
+          gte: filters?.MinAmount,
+          lte: filters?.MaxAmount,
         },
         TransactionDate: {
-          gte: filters.StartDate,
-          lte: filters.EndDate,
+          gte: filters?.StartDate,
+          lte: filters?.EndDate,
         },
         OR: [
           {

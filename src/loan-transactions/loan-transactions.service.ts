@@ -22,15 +22,15 @@ export class LoanTransactionsService {
     return await this.prismaService.loanTransactions.findMany({
       where: {
         Amount: {
-          gte: filter.MinAmount,
-          lte: filter.MaxAmount,
+          gte: filter?.MinAmount,
+          lte: filter?.MaxAmount,
         },
         ToAccount: {
-          LoanType: filter.TransactionType as LoanType,
+          LoanType: filter?.TransactionType as LoanType,
         },
         TransactionDate: {
-          gte: filter.StartDate,
-          lte: filter.EndDate,
+          gte: filter?.StartDate,
+          lte: filter?.EndDate,
         },
         OR: [
           {

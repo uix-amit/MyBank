@@ -6,7 +6,8 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
+import { LoanTransactions, SavingsAccount, Transactions } from '@prisma/client';
 
 import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
 import { AccountsService } from '@accounts/accounts.service';
@@ -18,9 +19,7 @@ import { LocalAuthGuard } from '@auth/local-auth/local-auth.guard';
 import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
 import { TransactionsService } from '@transactions/transactions.service';
 import { AppService } from './app.service';
-import { LoanTransactions, SavingsAccount, Transactions } from '@prisma/client';
 
-@IsPublic()
 @ApiTags('Index')
 @Controller({ path: '/', version: '1' })
 export class AppController {
@@ -33,8 +32,14 @@ export class AppController {
     private readonly accountPreferencesService: AccountPreferencesService,
   ) {}
 
+  @ApiBearerAuth('Authorization')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('/')
   async getDashboardData(@Request() req: any) {
     const accounts: SavingsAccount[] = await this.accountsService.findAll(
       req.user.UserID,
@@ -47,7 +52,7 @@ export class AppController {
       undefined,
       3,
     );
-    const weeklyTransactions: Transactions[] =
+    const weeklyTransactions =
       await this.transactionsService.getWeeklyTransactions(req.user.UserID);
     const loanTransactions: LoanTransactions[] =
       await this.loanTransactionsService.findAll(req.user.UserID, undefined, 5);
@@ -61,6 +66,7 @@ export class AppController {
     });
   }
 
+  @IsPublic()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req: any) {
@@ -73,6 +79,7 @@ export class AppController {
     }
   }
 
+  @IsPublic()
   @Post('auth/otp')
   async validateOtp(@Body() otpDto: OtpDto) {
     const userId = await this.authService.validateOtp(otpDto.id, otpDto.otp);
