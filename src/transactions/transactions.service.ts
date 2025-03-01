@@ -56,11 +56,16 @@ export class TransactionsService {
     });
   }
 
-  async getWeeklyTransactions(UserID: string) {
+  async getWeeklyTransactions(UserID: string): Promise<
+    {
+      name: string;
+      data: number[];
+    }[]
+  > {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    return await this.prismaService.transactions.groupBy({
+    const transactions = await this.prismaService.transactions.groupBy({
       by: ['TransactionType', 'TransactionDate'],
       where: {
         TransactionDate: {
@@ -83,9 +88,26 @@ export class TransactionsService {
         Amount: true,
       },
       orderBy: {
-        TransactionDate: 'desc',
+        TransactionDate: 'asc',
       },
     });
+
+    const result = [
+      { name: 'CREDIT', data: [] },
+      { name: 'DEBIT', data: [] },
+    ];
+
+    transactions.forEach((transaction) => {
+      const dayIndex = new Date(transaction.TransactionDate).getDay();
+      const transactionType = transaction.TransactionType;
+
+      const target = result.find((entry) => entry.name === transactionType);
+      if (target) {
+        target.data[dayIndex] = transaction._sum.Amount || 0;
+      }
+    });
+
+    return result;
   }
 
   async findOne(TransactionID: string): Promise<Transactions> {

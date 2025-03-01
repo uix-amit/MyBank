@@ -12,7 +12,10 @@ export class AppService {
       BankName: string;
       TotalBalance: number;
     }[];
-    weeklyTransactions: any;
+    weeklyTransactions: {
+      name: string;
+      data: number[];
+    }[];
   }) {
     return rawData;
   }

@@ -51,9 +51,17 @@ export class AccountsController {
   }
 
   @Get()
-  async findAll(
-    @Request() req: any,
-  ): Promise<Array<SavingsAccount & { Bank: { BankName: string } }>> {
+  async findAll(@Request() req: any): Promise<
+    Array<
+      SavingsAccount & {
+        Bank: { BankName: string };
+        User: {
+          FirstName: string;
+          LastName: string;
+        };
+      }
+    >
+  > {
     const UserID = req.user.UserID;
     return this.accountsService.findAll(UserID);
   }

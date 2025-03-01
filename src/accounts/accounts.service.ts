@@ -19,7 +19,17 @@ export class AccountsService {
   async findAll(
     UserID: string,
     limit?: number,
-  ): Promise<Array<SavingsAccount & { Bank: { BankName: string } }>> {
+  ): Promise<
+    Array<
+      SavingsAccount & {
+        Bank: { BankName: string };
+        User: {
+          FirstName: string;
+          LastName: string;
+        };
+      }
+    >
+  > {
     return await this.prismaService.savingsAccount.findMany({
       orderBy: {
         UpdatedAt: 'desc',
@@ -30,6 +40,12 @@ export class AccountsService {
         Bank: {
           select: {
             BankName: true,
+          },
+        },
+        User: {
+          select: {
+            FirstName: true,
+            LastName: true,
           },
         },
       },
