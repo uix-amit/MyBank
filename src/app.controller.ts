@@ -57,13 +57,13 @@ export class AppController {
     const loanTransactions: LoanTransactions[] =
       await this.loanTransactionsService.findAll(req.user.UserID, undefined, 5);
 
-    return this.appService.getDashboardData({
+    return {
       accounts,
       transactions,
       loanTransactions,
       accountBalanceByBank,
       weeklyTransactions,
-    });
+    };
   }
 
   @IsPublic()

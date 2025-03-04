@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, TransactionType, Transactions } from '@prisma/client';
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
+import { addDays, subDays } from 'date-fns';
 
+import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
 import { PrismaService } from '@sharedServices/prisma/prisma.service';
 
 @Injectable()
@@ -56,17 +57,41 @@ export class TransactionsService {
     });
   }
 
+  /**
+   * 
+   * This function needs improvement to return data in following format
+   * {
+        "DEBIT": [
+          {
+            "TransactionDate": "2025-03-04T05:32:21.106Z",
+            "Amount": 3000
+          },
+          {
+            "TransactionDate": "2025-03-05T05:32:21.106Z",
+            "Amount": 3000
+          }
+        ],
+        "CREDIT": [
+          {
+            "TransactionDate": "2025-03-04T05:32:21.106Z",
+            "Amount": 3000
+          },
+          {
+            "TransactionDate": "2025-03-05T05:32:21.106Z",
+            "Amount": 3000
+          }
+        ]
+      }
+   */
   async getWeeklyTransactions(UserID: string): Promise<
     {
       name: string;
       data: number[];
     }[]
   > {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgo = subDays(new Date(), 7);
 
-    const transactions = await this.prismaService.transactions.groupBy({
-      by: ['TransactionType', 'TransactionDate'],
+    const transactions = await this.prismaService.transactions.findMany({
       where: {
         TransactionDate: {
           gte: sevenDaysAgo,
@@ -84,30 +109,42 @@ export class TransactionsService {
           },
         ],
       },
-      _sum: {
-        Amount: true,
-      },
-      orderBy: {
-        TransactionDate: 'asc',
-      },
     });
 
-    const result = [
-      { name: 'CREDIT', data: [] },
-      { name: 'DEBIT', data: [] },
-    ];
+    const dateRange = [];
+    for (let i = 0; i < 7; i++) {
+      const date = addDays(sevenDaysAgo, i);
+      dateRange.push(date.toISOString().split('T')[0]);
+    }
 
-    transactions.forEach((transaction) => {
-      const dayIndex = new Date(transaction.TransactionDate).getDay();
-      const transactionType = transaction.TransactionType;
+    const groupedData = transactions.reduce((acc, transaction) => {
+      const dateOnly = transaction.TransactionDate.toISOString().split('T')[0];
+      const transactionType =
+        transaction.TransactionType === 'DEBIT' ? 'DEBIT' : 'CREDIT';
 
-      const target = result.find((entry) => entry.name === transactionType);
-      if (target) {
-        target.data[dayIndex] = transaction._sum.Amount || 0;
+      if (!acc[transactionType]) {
+        acc[transactionType] = dateRange.map(() => 0);
       }
-    });
 
-    return result;
+      const dateIndex = dateRange.indexOf(dateOnly);
+
+      if (dateIndex !== -1) {
+        acc[transactionType][dateIndex - 1] += transaction.Amount;
+      }
+
+      return acc;
+    }, {});
+
+    return [
+      {
+        name: 'DEBIT',
+        data: groupedData['DEBIT'] || dateRange.map(() => 0), // Fill with 0s if no 'DEBIT' transactions
+      },
+      {
+        name: 'CREDIT',
+        data: groupedData['CREDIT'] || dateRange.map(() => 0), // Fill with 0s if no 'CREDIT' transactions
+      },
+    ];
   }
 
   async findOne(TransactionID: string): Promise<Transactions> {
