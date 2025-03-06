@@ -67,6 +67,12 @@ export class AppController {
   }
 
   @IsPublic()
+  @Get('/hello')
+  getHello(): string {
+    return 'Hello World!';
+  }
+
+  @IsPublic()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req: any) {
