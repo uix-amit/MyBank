@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { TwoFactorAuthService } from '@two-factor-auth/two-factor-auth.service';
-import { TwoFactorAuthController } from '@two-factor-auth/two-factor-auth.controller';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
+import { TwoFactorAuthController } from './two-factor-auth.controller';
+import { TwoFactorAuthService } from './two-factor-auth.service';
 
 @Module({
   imports: [SharedModule],

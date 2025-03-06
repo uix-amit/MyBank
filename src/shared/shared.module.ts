@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import { NotificationsService } from '@notifications/notifications.service';
-import { MailerService } from '@sharedServices/mailer/mailer.service';
-import { PrismaService } from '@sharedServices/prisma/prisma.service';
-import { IdValidationDto } from '@sharedValidators/id-validation-dto';
+import { NotificationsService } from '../notifications/notifications.service';
 import { PasswordService } from './password/password.service';
+import { MailerService } from './services/mailer/mailer.service';
+import { PrismaService } from './services/prisma/prisma.service';
+import { IdValidationDto } from './validators/id-validation-dto';
 
 @Module({
   imports: [IdValidationDto],

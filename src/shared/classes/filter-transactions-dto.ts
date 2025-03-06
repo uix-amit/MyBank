@@ -1,8 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { LoanType, TransactionType } from '@prisma/client';
-import { isValidDate } from '@shared/utils/date-validator';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+
+import { isValidDate } from '../utils/date-validator';
 
 export enum LoanOrSavingsTransfer {
   CREDIT = 'CREDIT',

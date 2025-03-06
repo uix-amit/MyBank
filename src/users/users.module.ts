@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
-import { AccountPreferencesModule } from '@accountPreferences/account-preferences.module';
-import { SharedModule } from '@shared/shared.module';
-import { UsersController } from '@users/users.controller';
-import { UsersService } from '@users/users.service';
+import { AccountPreferencesModule } from '../account-preferences/account-preferences.module';
+import { SharedModule } from '../shared/shared.module';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 
 @Module({
   imports: [SharedModule, AccountPreferencesModule],

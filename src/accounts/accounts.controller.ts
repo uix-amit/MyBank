@@ -12,13 +12,13 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Banks, SavingsAccount } from '@prisma/client';
 
-import { AccountsService } from '@accounts/accounts.service';
-import { CreateAccountDto } from '@accounts/dto/create-account-dto';
-import { UpdateAccountDto } from '@accounts/dto/update-account-dto';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { NotificationsService } from '@notifications/notifications.service';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
-import { AccountStatsDto } from '@shared/classes/account-stats-dto';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '../notifications/notifications.service';
+import { AccountStatsDto } from '../shared/classes/account-stats-dto';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { AccountsService } from './accounts.service';
+import { CreateAccountDto } from './dto/create-account-dto';
+import { UpdateAccountDto } from './dto/update-account-dto';
 
 @ApiTags('Savings Account')
 @ApiBearerAuth('Authorization')

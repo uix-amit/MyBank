@@ -13,14 +13,14 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { SavingsAccount, Transactions } from '@prisma/client';
 
-import { AccountsService } from '@accounts/accounts.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { NotificationsService } from '@notifications/notifications.service';
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
-import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
-import { UpdateTransactionDto } from '@transactions/dto/update-transaction-dto';
-import { TransactionsService } from '@transactions/transactions.service';
+import { AccountsService } from '../accounts/accounts.service';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '../notifications/notifications.service';
+import { FilterTransactionsDto } from '../shared/classes/filter-transactions-dto';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { CreateTransactionDto } from './dto/create-transaction-dto';
+import { UpdateTransactionDto } from './dto/update-transaction-dto';
+import { TransactionsService } from './transactions.service';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('Authorization')

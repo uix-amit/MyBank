@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, TransactionType, Transactions } from '@prisma/client';
 import { addDays, subDays } from 'date-fns';
 
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
-import { PrismaService } from '@sharedServices/prisma/prisma.service';
+import { FilterTransactionsDto } from '../shared/classes/filter-transactions-dto';
+import { PrismaService } from '../shared/services/prisma/prisma.service';
 
 @Injectable()
 export class TransactionsService {

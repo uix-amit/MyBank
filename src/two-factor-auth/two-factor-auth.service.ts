@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, TwoFactorAuth } from '@prisma/client';
 
-import { PrismaService } from '@shared/services/prisma/prisma.service';
+import { PrismaService } from '../shared/services/prisma/prisma.service';
 
 @Injectable()
 export class TwoFactorAuthService {

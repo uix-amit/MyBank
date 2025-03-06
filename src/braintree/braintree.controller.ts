@@ -7,15 +7,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
-
-import { AccountsService } from '@accounts/accounts.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
-import { LoansService } from '@loans/loans.service';
-import { NotificationsService } from '@notifications/notifications.service';
 import { SavingsAccount } from '@prisma/client';
-import { CreateTransactionDto } from '@transactions/dto/create-transaction-dto';
-import { TransactionsService } from '@transactions/transactions.service';
+
+import { AccountsService } from '../accounts/accounts.service';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { LoanTransactionsService } from '../loan-transactions/loan-transactions.service';
+import { LoansService } from '../loans/loans.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { CreateTransactionDto } from '../transactions/dto/create-transaction-dto';
+import { TransactionsService } from '../transactions/transactions.service';
 import { BraintreeService } from './braintree.service';
 
 @ApiTags('Braintree')

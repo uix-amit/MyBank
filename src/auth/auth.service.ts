@@ -6,14 +6,14 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TwoFactorAuth, Users } from '@prisma/client';
+import { differenceInMinutes } from 'date-fns';
 import ejs from 'ejs';
 import path from 'path';
 
-import { PasswordService } from '@shared/password/password.service';
-import { MailerService } from '@shared/services/mailer/mailer.service';
-import { TwoFactorAuthService } from '@two-factor-auth/two-factor-auth.service';
-import { UsersService } from '@users/users.service';
-import { differenceInMinutes } from 'date-fns';
+import { PasswordService } from '../shared/password/password.service';
+import { MailerService } from '../shared/services/mailer/mailer.service';
+import { TwoFactorAuthService } from '../two-factor-auth/two-factor-auth.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {

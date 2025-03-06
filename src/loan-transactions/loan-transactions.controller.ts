@@ -12,14 +12,14 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 
-import { AccountsService } from '@accounts/accounts.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { CreateLoanTransactionDto } from '@loan-transactions/dto/create-loan-transaction.dto';
-import { UpdateLoanTransactionDto } from '@loan-transactions/dto/update-loan-transaction.dto';
-import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
-import { LoansService } from '@loans/loans.service';
-import { NotificationsService } from '@notifications/notifications.service';
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
+import { AccountsService } from '../accounts/accounts.service';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { LoansService } from '../loans/loans.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { FilterTransactionsDto } from '../shared/classes/filter-transactions-dto';
+import { CreateLoanTransactionDto } from './dto/create-loan-transaction.dto';
+import { UpdateLoanTransactionDto } from './dto/update-loan-transaction.dto';
+import { LoanTransactionsService } from './loan-transactions.service';
 
 @ApiTags('Loan Account Transactions')
 @ApiBearerAuth('Authorization')

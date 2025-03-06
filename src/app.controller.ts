@@ -9,16 +9,16 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { LoanTransactions, SavingsAccount, Transactions } from '@prisma/client';
 
-import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
-import { AccountsService } from '@accounts/accounts.service';
-import { AuthService } from '@auth/auth.service';
-import { OtpDto } from '@auth/dto/otp-dto';
-import { IsPublic } from '@auth/is-public/is-public.decorator';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { LocalAuthGuard } from '@auth/local-auth/local-auth.guard';
-import { LoanTransactionsService } from '@loan-transactions/loan-transactions.service';
-import { TransactionsService } from '@transactions/transactions.service';
+import { AccountPreferencesService } from './account-preferences/account-preferences.service';
+import { AccountsService } from './accounts/accounts.service';
 import { AppService } from './app.service';
+import { AuthService } from './auth/auth.service';
+import { OtpDto } from './auth/dto/otp-dto';
+import { IsPublic } from './auth/is-public/is-public.decorator';
+import { JwtAuthGuard } from './auth/jwt-auth/jwt-auth.guard';
+import { LocalAuthGuard } from './auth/local-auth/local-auth.guard';
+import { LoanTransactionsService } from './loan-transactions/loan-transactions.service';
+import { TransactionsService } from './transactions/transactions.service';
 
 @ApiTags('Index')
 @Controller({ path: '/', version: '1' })

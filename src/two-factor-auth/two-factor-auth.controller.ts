@@ -10,11 +10,11 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { TwoFactorAuth } from '@prisma/client';
 
-import { IsPublic } from '@auth/is-public/is-public.decorator';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
-import { CreateTwoFactorAuthDto } from '@two-factor-auth/dto/create-two-factor-auth-dto';
-import { UpdateTwoFactorAuthDto } from '@two-factor-auth/dto/update-two-factor-auth-dto';
-import { TwoFactorAuthService } from '@two-factor-auth/two-factor-auth.service';
+import { IsPublic } from '../auth/is-public/is-public.decorator';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { CreateTwoFactorAuthDto } from './dto/create-two-factor-auth-dto';
+import { UpdateTwoFactorAuthDto } from './dto/update-two-factor-auth-dto';
+import { TwoFactorAuthService } from './two-factor-auth.service';
 
 @ApiTags('Two Factor Auth')
 @ApiBearerAuth('Authorization')

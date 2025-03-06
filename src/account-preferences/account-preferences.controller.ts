@@ -12,12 +12,12 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AccountPreferences } from '@prisma/client';
 
-import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
-import { CreateAccountPreferencesDto } from '@accountPreferences/dto/create-account-preferences-dto';
-import { UpdateAccountPreferencesDto } from '@accountPreferences/dto/update-account-preferences-dto';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { NotificationsService } from '@notifications/notifications.service';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '../notifications/notifications.service';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { AccountPreferencesService } from './account-preferences.service';
+import { CreateAccountPreferencesDto } from './dto/create-account-preferences-dto';
+import { UpdateAccountPreferencesDto } from './dto/update-account-preferences-dto';
 
 @ApiTags('Account Preferences')
 @ApiBearerAuth('Authorization')

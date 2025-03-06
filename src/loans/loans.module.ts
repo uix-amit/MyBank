@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { LoansService } from '@loans/loans.service';
-import { LoansController } from '@loans/loans.controller';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
+import { LoansController } from './loans.controller';
+import { LoansService } from './loans.service';
 
 @Module({
   imports: [SharedModule],

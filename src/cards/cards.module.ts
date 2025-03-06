@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { CardsService } from '@cards/cards.service';
-import { CardsController } from '@cards/cards.controller';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
+import { CardsController } from './cards.controller';
+import { CardsService } from './cards.service';
 
 @Module({
   imports: [SharedModule],

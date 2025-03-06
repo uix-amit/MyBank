@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { LoanTransactions, LoanType, Prisma } from '@prisma/client';
-import { FilterTransactionsDto } from '@shared/classes/filter-transactions-dto';
-import { PrismaService } from '@shared/services/prisma/prisma.service';
+
+import { FilterTransactionsDto } from '../shared/classes/filter-transactions-dto';
+import { PrismaService } from '../shared/services/prisma/prisma.service';
 
 @Injectable()
 export class LoanTransactionsService {

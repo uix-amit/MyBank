@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Banks, Prisma, SavingsAccount } from '@prisma/client';
-import { AccountStatsDto } from '@shared/classes/account-stats-dto';
 
-import { PrismaService } from '@sharedServices/prisma/prisma.service';
+import { AccountStatsDto } from '../shared/classes/account-stats-dto';
+import { PrismaService } from '../shared/services/prisma/prisma.service';
 
 @Injectable()
 export class AccountsService {

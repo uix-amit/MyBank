@@ -13,12 +13,12 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Notifications, Prisma } from '@prisma/client';
 
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { CreateNotificationDto } from '@notifications/dto/create-notification-dto';
-import { UpdateNotificationDto } from '@notifications/dto/update-notification-dto';
-import { NotificationsService } from '@notifications/notifications.service';
-import { FilterNotificationsDto } from '@shared/classes/filter-notifications-dto';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { FilterNotificationsDto } from '../shared/classes/filter-notifications-dto';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { CreateNotificationDto } from './dto/create-notification-dto';
+import { UpdateNotificationDto } from './dto/update-notification-dto';
+import { NotificationsService } from './notifications.service';
 
 @ApiTags('Notifications')
 @ApiBearerAuth('Authorization')

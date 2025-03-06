@@ -12,15 +12,15 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
 
-import { AccountPreferencesService } from '@accountPreferences/account-preferences.service';
-import { IsPublic } from '@auth/is-public/is-public.decorator';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { NotificationsService } from '@notifications/notifications.service';
-import { PasswordService } from '@shared/password/password.service';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
-import { CreateUserDto } from '@users/dto/create-user-dto';
-import { UpdateUserDto } from '@users/dto/update-user-dto';
-import { UsersService } from '@users/users.service';
+import { AccountPreferencesService } from '../account-preferences/account-preferences.service';
+import { IsPublic } from '../auth/is-public/is-public.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '../notifications/notifications.service';
+import { PasswordService } from '../shared/password/password.service';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { CreateUserDto } from './dto/create-user-dto';
+import { UpdateUserDto } from './dto/update-user-dto';
+import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @ApiBearerAuth('Authorization')

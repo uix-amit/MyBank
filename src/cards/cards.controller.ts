@@ -12,12 +12,12 @@ import {
 import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { Cards } from '@prisma/client';
 
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { CardsService } from '@cards/cards.service';
-import { CreateCardDto } from '@cards/dto/create-card-dto';
-import { UpdateCardDto } from '@cards/dto/update-card-dto';
-import { NotificationsService } from '@notifications/notifications.service';
-import { IdValidationDto } from '@shared/validators/id-validation-dto';
+import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
+import { NotificationsService } from '../notifications/notifications.service';
+import { IdValidationDto } from '../shared/validators/id-validation-dto';
+import { CardsService } from './cards.service';
+import { CreateCardDto } from './dto/create-card-dto';
+import { UpdateCardDto } from './dto/update-card-dto';
 
 @ApiTags('Cards')
 @ApiBearerAuth('Authorization')

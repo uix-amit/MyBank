@@ -4,14 +4,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { AccountPreferencesModule } from '@accountPreferences/account-preferences.module';
-import { AuthService } from '@auth/auth.service';
-import { JwtAuthGuard } from '@auth/jwt-auth/jwt-auth.guard';
-import { JwtStrategyService } from '@auth/jwt-strategy/jwt-strategy.service';
-import { LocalStrategyService } from '@auth/local-strategy/local-strategy.service';
-import { SharedModule } from '@shared/shared.module';
-import { TwoFactorAuthModule } from '@two-factor-auth/two-factor-auth.module';
-import { UsersModule } from '@users/users.module';
+import { AccountPreferencesModule } from '../account-preferences/account-preferences.module';
+import { SharedModule } from '../shared/shared.module';
+import { TwoFactorAuthModule } from '../two-factor-auth/two-factor-auth.module';
+import { UsersModule } from '../users/users.module';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
+import { JwtStrategyService } from './jwt-strategy/jwt-strategy.service';
+import { LocalStrategyService } from './local-strategy/local-strategy.service';
 
 @Module({
   imports: [
