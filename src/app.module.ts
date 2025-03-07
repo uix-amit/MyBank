@@ -35,20 +35,7 @@ import { UsersModule } from './users/users.module';
     NotificationsModule,
     TwoFactorAuthModule,
     AccountPreferencesModule,
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-          },
-        },
-        timestamp: () => `,"timestamp":"${new Date(Date.now()).toISOString()}"`,
-        formatters: {
-          level: (label) => ({ level: label.toUpperCase() }),
-        },
-      },
-    }),
+    LoggerModule.forRoot(),
     AuthModule,
     LoanTransactionsModule,
     BraintreeModule,
